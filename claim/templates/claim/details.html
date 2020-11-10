@@ -1,0 +1,345 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style type="text/css">
+    .docusign{margin-bottom: 0px;margin-top:0px;}
+</style>
+<!-- <h2>Campaign List</h2> -->
+<div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                  <div class="card-header card-header-primary">
+                      <h4 class="card-title">PARTNER COMPANY DETAILS</h4>
+                      <h6 class="card-title">status {{partners_data.partners_status}}</h6>
+                  </div>
+                  <div class="card-body">
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group bmd-form-group">
+                                  <label class="bmd-label-floating">Company Name</label>
+                                  <input type="text" class="form-control" value = "{{partners_data.partner_company_name}}" disabled="">
+                              </div>
+                          </div>
+                          <div class="col-md-6">
+                              <div class="form-group bmd-form-group">
+                                  <label class="bmd-label-floating">Country</label>
+                                  <input type="text" class="form-control" value = "{{partners_data.partner_country}}" disabled="">
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                              <div class="form-group bmd-form-group">
+                                  <label class="bmd-label-floating">City</label>
+                                  <input type="text" class="form-control" value = "{{partners_data.partner_city}}" disabled="">
+                              </div>
+                          </div>
+                          <div class="col-md-6">
+                              <div class="form-group bmd-form-group">
+                                  <label class="bmd-label-floating">Founded In</label>
+                                  <input type="text" class="form-control" value = "{{partners_data.partner_founded_in_yr}}" disabled="">
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group bmd-form-group">
+                                  <label class="bmd-label-floating">Last 12 months Turnover</label>
+                                  <input type="text" class="form-control" value = "{{partners_data.partner_months_turnover}}" disabled="">
+                              </div>
+                          </div>
+                          <div class="col-md-6">
+                              <div class="form-group bmd-form-group">
+                                  <label class="bmd-label-floating">No. of units sold monthly</label>
+                                  <input type="text" class="form-control" value = "{{partners_data.partner_no_of_unit_sold}}" disabled="">
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                              <div class="form-group bmd-form-group">
+                                  <!--<label class="bmd-label-floating">Company License</label>
+                                  <label class="bmd-label-floating"><a href="https://dev.protect4less.com/media/claim_theft_documents/05-Feb-2020_00:00:00_partners_3quicksteps.jpg" target="_self">Company License</a></label>-->
+                                  <button class="btn btn-primary btn-round mat-raised-button" mat-raised-button="" id = "company_license_btn" data-target="https://dev.protect4less.com/media/claim_theft_documents/{{partners_data.partner_company_license}}">
+                                    <span class="mat-button-wrapper">
+                                      <i class="material-icons">dvr</i>
+                                       Company License 
+                                     </span>
+                                  </button>
+                              </div>
+                        </div>
+                      </div>
+                      <!--<button type="submit" class="btn btn-primary pull-right">Accept</button>
+                      <button type="submit" class="btn btn-primary pull-right">Reject</button>
+                      <div class="clearfix"></div>-->
+                  </div>
+              </div>
+              <div class="card">
+                  <div class="card-header card-header-primary">
+                      <h4 class="card-title">BUSINESS CONTACT PERSON</h4>
+                  </div>
+                  <div class="card-body">
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group bmd-form-group">
+                                  <label class="bmd-label-floating">Name</label>
+                                  <input type="text" class="form-control" value = "{{partners_data.partners_name}}" disabled="">
+                              </div>
+                          </div>
+                          <div class="col-md-6">
+                              <div class="form-group bmd-form-group">
+                                  <label class="bmd-label-floating">Mobile</label>
+                                  <input type="text" class="form-control" value = "{{partners_data.partners_msisdn}}" disabled="">
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                              <div class="form-group bmd-form-group">
+                                  <label class="bmd-label-floating">Email</label>
+                                  <input type="text" class="form-control" value = "{{partners_data.partners_emailid}}" disabled="">
+                              </div>
+                          </div>
+                          <div class="col-md-6">
+                              <div class="form-group bmd-form-group">
+                                  <label class="bmd-label-floating">Expected device protection plan monthly sales</label>
+                                  <input type="text" class="form-control" value = "{{partners_data.partner_expected_sales}}" disabled="">
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group bmd-form-group">
+                                  <label class="bmd-label-floating">No. of Retail Outlets</label>
+                                  <input type="text" class="form-control" value = "{{partners_data.partner_no_of_retail_outlets}}" disabled="">
+                              </div>
+                          </div>
+                          <div class="col-md-6">
+                              <div class="form-group bmd-form-group">
+                                  <label class="bmd-label-floating">No. of countries</label>
+                                  <input type="text" class="form-control" value = "{{partners_data.partner_no_of_countries}}" disabled="">
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            </div>
+            <div class="card">
+                  <form method="post" action="" id="partner_details_form" enctype="multipart/form-data">
+                    <div class="card-header card-header-primary">
+                        <h4 class="card-title">PARTNER DETAILS</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                          <div class="col-md-12">
+                          {% if messages %}
+                            {% for message in messages %}
+                                {% if forloop.last %}
+                                <div class="alert alert-{{ message.tags }}" role="alert" style="color: red">
+                                  {{ message|safe }}
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                          {% endif %}
+                          </div>
+                        </div>
+
+                        {% if partners_data.partners_status == "pending" %}
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">
+                                <h4 class="title docusign">DocuSign Document</h4>
+                                <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                  
+                                   <i class="material-icons green">insert_drive_file</i>
+                                  
+                                </div>
+                                <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                                <div>
+                                  <span class="btn btn-rose btn-round btn-file">
+                                    <span class="fileinput-new">Select Document</span>
+                                    <span class="fileinput-exists">Change</span>
+                                    <input type="file" name="docusign_doc" id="docusign_doc"/>
+
+                                  </span>
+
+                                  <a href="#pablo" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
+                                  <br><span><i> [Only .docx, .doc, .pdf format is allowed]</i></span>
+                                  <span id="file_error"></span>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                                {% if partners_data.partners_status == "pending" %}
+                                <div class="dropdown">
+                                    <button href="#" class="btn dropdown-toggle" style="background-color:#9c27b0;border-color: #9c27b0;" id = "approval_status_btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        Approval Status
+                                        <b class="caret"></b>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="approval_status_btn" id = "approval_status_list">
+                                        <li><a href = "javascript:void(0)" rel = "" val = "Approval Status">Approval Status</a></li>
+                                        <li><a href = "javascript:void(0)" rel = "active" val = "Accepted">Accepted</a></li>
+                                        <li><a href = "javascript:void(0)" rel = "rejected" val = "Rejected">Rejected</a></li>
+                                    </ul>
+                                </div>
+                                {% else %}
+                                <div class="form-group bmd-form-group">
+                                    <label class="bmd-label-floating">Approval Status</label>
+                                    <input type="text" class="form-control" value = '{% if partners_data.partners_status == "active"%}ACCEPTED{% else %} {{approval_status}}{% endif %}' disabled="" name = "partners_code" id = "partners_code">
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group bmd-form-group">
+                                    <a class="btn btn-primary btn-round mat-raised-button" href="{% url 'partners:document_file' %}?filename={{partners_data.partners_document_file}}" target="_blank">
+                                    <span class="mat-button-wrapper">
+                                    <i class="material-icons">dvr</i>
+                                           DocuSign Document 
+                                     </span>
+                                    </a>
+                                  </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                       <!--  <div class="row">
+                            
+                        </div> -->
+                        <div class="clearfix"></div>
+                        <div class="row">
+                            {% if partners_data.partners_status == "pending" or partners_data.partners_status == "active"%}
+                            <div class="col-md-6">
+                                <div class="form-group bmd-form-group">
+                                    <label class="bmd-label-floating">Partner Code</label>
+                                    <input type="text" class="form-control" value = "{{partners_code}}" disabled="" name = "partners_code" id = "partners_code" minlength="4" maxlength="10" required="">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group bmd-form-group">
+                                    <label class="bmd-label-floating">Monthly Plan Commission %</label>
+                                    <input type="text" class="form-control" value = "{{monthly_commission}}" {% if partners_data.partners_status != "active" %} disabled="" {% endif %} name = "monthly_commission" id = "monthly_commission" maxlength="3" required="">
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="clearfix"></div>
+                        {% if partners_data.partners_status == "pending" or partners_data.partners_status == "active"%}
+                        <div class="row">
+                          <!-- <div class="col-md-6">
+                            <div class="form-group bmd-form-group">
+                              <label class="bmd-label-floating">HalfYearly Plan Commission %</label>
+                              <input type="text" class="form-control" value = "{{halfyearly_commission}}" {% if partners_data.partners_status != "active" %} disabled="" {% endif %} name = "halfyearly_commission" id = "halfyearly_commission" maxlength="3" required="">
+                            </div>
+                          </div> -->
+                        
+                            <div class="col-md-6">
+                                <div class="form-group bmd-form-group">
+                                    <label class="bmd-label-floating" for = "yearly_commission_label">Yearly Plan Commission %</label>
+                                    <input type="text" class="form-control" value = "{{yearly_commission}}" {% if partners_data.partners_status != "active" %} disabled="" {% endif %} name = "yearly_commission" id = "yearly_commission" maxlength="3" required="">
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                  </div>
+                  {% if partners_data.partners_status == "pending" %}
+                  {% csrf_token %}
+                  <input type="hidden" name="approval_status" value="" id = "approval_status">
+                  <button type="submit" class="btn btn-primary pull-right" onclick="return validate();">Submit</button>
+                  <div class="clearfix"></div>
+                  {% endif %}
+                </form>
+            </div>
+          </div>
+            <!-- end col-md-12 -->
+          </div>
+          <!-- end row -->
+        </div>
+      </div>
+                    
+{% endblock content %}
+{% block extra_scripts %}
+<script>
+    $("#company_license_btn" ).click(function() {
+      var url = $(this).data('target');
+      window.open(url, '_blank');
+    });
+
+    // $("#docusign_document_btn" ).click(function() {
+    //   var url = $(this).data('target');
+    //   window.open(url, '_blank');
+    // });
+
+    $("#approval_status_list li a" ).click(function() {
+      let key = $(this).attr("rel")
+      let val = $(this).attr("val")
+      $("#approval_status_btn").html(val);
+      $("#approval_status").val(key); 
+      if(key == "active") {
+        $('#partners_code').prop("disabled", false);
+        $('#monthly_commission').prop("disabled", false);
+        $('#halfyearly_commission').prop("disabled", false);
+        $('#yearly_commission').prop("disabled", false);
+      } else {
+        $('#partners_code').val("");
+        $('#monthly_commission').val("");
+        $('#halfyearly_commission').val("");
+        $('#yearly_commission').val("");
+        $('#partners_code').prop("disabled", true);
+        $('#monthly_commission').prop("disabled", true);
+        $('#halfyearly_commission').prop("disabled", true);
+        $('#yearly_commission').prop("disabled", true);
+      }
+    });
+
+    $("#monthly_commission, #halfyearly_commission, #yearly_commission").keypress(function(evt){
+      var charCode = (evt.which) ? evt.which : event.keyCode
+      if (charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+      return true;
+    });
+
+    $("#partners_code").keypress(function(evt){
+      var charCode = (evt.which) ? evt.which : event.keyCode
+      console.log('charCode::'+charCode);
+      if (charCode == 45){
+        return true;
+      }
+      if (charCode > 31 && (charCode < 48 || charCode > 57) && (charCode < 65 || charCode > 90) && (charCode < 97 || charCode > 122) ) {
+        return false;
+      }
+
+      return true;
+    });
+
+    function validate() {
+      if(Number($("#monthly_commission").val()) > 100 || Number($("#halfyearly_commission").val()) > 100 || Number($("#yearly_commission").val()) > 100) {
+        alert("The Given Partner Commission Is Greater Than 100!");
+        return false;
+      }
+      return true;
+    }
+
+    $("#docusign_doc").change(function(){
+        let doucment_type_allowed = ["application/pdf","application/vnd.openxmlformats-officedocument.wordprocessingml.document","application/msword"];
+        $("#file_error").html("");
+        $("#docusign_doc").css("border-color","#F0F0F0");
+        if($('#docusign_doc')[0].files[0]){
+            if($.inArray( $('#docusign_doc')[0].files[0].type, doucment_type_allowed )  == -1 ){
+                $("#file_error").html("<p style='color:#FF0000'>File format not allowed</p>");
+            }
+            console.log($('#docusign_doc')[0].files[0]);
+            var file_size = $('#docusign_doc')[0].files[0].size;
+            if(file_size>3072000) {
+                $("#file_error").html("<p style='color:#FF0000'>File size is greater than 3MB</p>");
+                $("#docusign_doc").css("border-color","#FF0000");
+                return false;
+            } 
+        }
+        return true;
+    });
+</script>
+{% endblock extra_scripts %}

@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style type="text/css">
+
+  .partners-list .status{
+    color: #fff;
+    padding: 6px;
+    font-weight: 600;
+  }
+  .partners-list .active{
+    background: #01C965;
+  }
+  .partners-list .paid{
+    background: #01C965;
+  }
+
+  .partners-list .rejected{
+    background: #E50019;
+  }
+
+  .partners-list .pending{
+    background: #ffd436;
+  }
+  i.green{color:#2fbf35;}
+</style>
+<div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header card-header-primary card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">assignment</i>
+                  </div>
+                  <h4 class="card-title">Pending Payment Claim List</h4>
+                </div>
+                <div class="card-body">
+                  <div class="toolbar">
+                    {% if messages %}
+                      {% for message in messages %}
+                          {% if forloop.last %}
+                          <div class="alert alert-{{ message.tags }}" role="alert">
+                            {{ message|safe }}
+                          </div>
+                          {% endif %}
+                      {% endfor %}
+                    {% endif %}
+                  </div>
+                  <div class="material-datatables">
+                    <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                      <thead>
+                        <tr>
+                          <th>Claim Creation Date</th>
+                          <th>Plan No.</th>
+                          <th>Claim No.</th>
+                          <th>Payable Amount</th>
+                          <th>Current Payment Status</th>
+                          <th>Change Status</th>
+                        </tr>
+                      </thead>
+                      {% if claim_data %}
+                        <tfoot>
+                          <tr>
+                            <th>Claim Creation Date</th>
+                            <th>Plan No.</th>
+                            <th>Claim No.</th>
+                            <th>Payable Amount</th>
+                            <th>Current Payment Status</th>
+                            <th>Change Status</th>
+                          </tr>
+                        </tfoot>
+                      {% endif %}
+                      <tbody class="partners-list">
+                        {% if claim_data %}
+                          {% for v in claim_data %}
+                          <tr>
+                            <td>{{v.cpp_addedon|date:"d-M-Y"}}</td>
+                            <td>{{v.cpp_polic_no}}</td>
+                            <td>{{v.cpp_claim_no}}</td>
+                            <td>{{v.cpp_charge_unit}} {{v.cpp_charge_amount}}</td>
+                            <td><span class="status {{v.cpp_status}}">{% if v.cpp_status == "paid"%}PAID{% else %} {{v.cpp_status|upper}}{% endif %}</span></td>
+                            <td>
+                                <div id="docu_sent_div_{{v.cpp_id}}">
+                                {% if v.cpp_status == "pending" %}
+                                    <div class="form-check mr-auto">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input is-docusign-done" type="checkbox" value="{{v.cpp_id}}">
+                                            <span class="form-check-sign">
+                                                <span class="check"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                {% endif %}
+
+                                {% if v.cpp_status == "paid" %}
+                                <i class="material-icons green">check_circle</i>
+                                {% endif %}
+                                </div>
+                            </td>
+                            
+                          </tr>
+                          {% endfor %}
+                        {% endif %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <!-- end content-->
+              </div>
+              <!--  end card  -->
+            </div>
+            <!-- end col-md-12 -->
+          </div>
+          <!-- end row -->
+        </div>
+      </div>
+                    
+{% endblock content %}
+{% block extra_scripts %}
+<script>
+    $(document).ready(function() {
+        $('#datatables').DataTable({
+            "pagingType": "full_numbers",
+            "order": [[ 0, "desc" ]],
+            "lengthMenu": [
+              [10, 25, 50, -1],
+              [10, 25, 50, "All"]
+            ],
+            responsive: true,
+            language: {
+              search: "_INPUT_",
+              searchPlaceholder: "Search records",
+            }
+        });
+
+        var table = $('#datatable').DataTable();
+
+        // Edit record
+        table.on('click', '.edit', function() {
+            $tr = $(this).closest('tr');
+            var data = table.row($tr).data();
+            alert('You press on Row: ' + data[0] + ' ' + data[1] + ' ' + data[2] + '\'s row.');
+        });
+
+        $('.is-docusign-done').change(function() {
+            if(this.checked) {
+                // console.log($(this).val());
+                let cpp_id = $(this).val();
+                let token = '{{csrf_token}}';
+                swal({
+                    title: '',
+                    text: 'Are you sure you have recevied the Pending Payment from Service center?',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, I did!',
+                    cancelButtonText: 'No',
+                    confirmButtonClass: "btn btn-success",
+                    cancelButtonClass: "btn btn-danger",
+                    buttonsStyling: false
+                }).then(function(dismiss) {
+                    console.log(dismiss.dismiss);
+                    // dismiss can be 'overlay', 'cancel', 'close', 'esc', 'timer'
+                    if (dismiss.dismiss === 'cancel') {
+                        $(this).prop("checked", false);
+                        if(this.checked) {
+                            //alert('1');
+                        }else{
+                           // alert('1');
+
+                        }
+                        /*swal({
+                            title: 'Cancelled',
+                            text: 'Your imaginary file is safe :)',
+                            type: 'error',
+                            confirmButtonClass: "btn btn-info",
+                            buttonsStyling: false
+                        }).catch(swal.noop)*/
+                    }else{
+                        $.ajax({
+                            headers: { "X-CSRFToken": token },
+                            url: "{% url 'claim:received-payment' %}",
+                            type: "POST",
+                            data:  {'cpp_id':cpp_id},
+                            dataType: 'json',
+                            csrfmiddlewaretoken: "{{ csrf_token }}",
+                            beforeSend: function(){
+                                  
+                            },
+                            success: function (data) {
+                                console.log(data);
+                                if(data.status == 'OK'){
+                                    $('#docu_sent_div_'+cpp_id).html('<i class="material-icons green">check_circle</i>');
+                                    swal({
+                                        title: 'Success!',
+                                        text: 'We have successfully updated the record',
+                                        type: 'success',
+                                        confirmButtonClass: "btn btn-success",
+                                        buttonsStyling: false
+                                    }).catch(swal.noop)
+                                }
+                                if(data.status == 'NOK'){
+                                    swal({
+                                        title: 'Error',
+                                        text: 'Some technical issue occured. Please contact the dev team',
+                                        type: 'warning',
+                                        confirmButtonClass: "btn btn-success",
+                                        buttonsStyling: false
+                                    }).catch(swal.noop)
+                                }
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                swal({
+                                    title: 'Error',
+                                    text: 'Some technical issue occured. Please contact the dev team',
+                                    type: 'warning',
+                                    confirmButtonClass: "btn btn-success",
+                                    buttonsStyling: false
+                                }).catch(swal.noop)
+                                console.log(jqXHR);
+                                console.log(textStatus);
+                                console.log(errorThrown);
+                            },
+                        });
+                    }
+                })
+            }
+        //$('#textbox1').val(this.checked);        
+        });
+    });
+  </script>
+{% endblock extra_scripts %}

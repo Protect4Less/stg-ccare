@@ -1,0 +1,321 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<style type="text/css">
+
+  .partners-list .status{
+    color: #fff;
+    padding: 6px;
+    font-weight: 600;
+  }
+  .partners-list .active{
+    background: #01C965;
+  }
+  .partners-list .rejected{
+    background: #E50019;
+  }
+  .partners-list .pending{
+    background: #ffd436;
+  }
+  i.green{color:#2fbf35;}
+ table.dataTable thead > tr > th {
+    padding-left: 20px !important;
+    padding-right: 10px !important;
+}
+
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_desc:after {
+    left: 8px !important;
+    right: auto !important;
+}
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_desc:before {
+    left: 8px !important;
+    right: auto !important;
+}
+</style>
+<div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header card-header-primary card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">assignment</i>
+                  </div>
+                  <h4 class="card-title">Partner Subscription Statistics</h4>
+                </div>
+                <div class="card-body">
+                  <form method="POST" action="{% url 'partners:stats'%}">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                      <div class="col-md-6"> 
+                          <h4 class="card-title">Select Date</h4>
+                          <div  style="background: #fff; cursor: pointer; border: 1px solid #ccc; padding: 5px 10px; width: 100%">
+                            
+                            <i class="fa fa-calendar"></i>&nbsp;
+                            <span></span> 
+                            <i class="fa fa-caret-down"></i>
+                            <input type="text" id="reportrange" name="reportrange" value="{{ date_range }}" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 0px; width: 80%"/>
+                          </div>
+                      </div>
+                      <div class="card-footer " style='margin-top:14px'>
+                      <button type="submit" class="btn btn-fill btn-rose">Submit</button>
+                    </div>
+                    </div>
+                    
+                  </form>
+                  <div class="toolbar">
+                    {% if messages %}
+                      {% for message in messages %}
+                          {% if forloop.last %}
+                          <div class="alert alert-{{ message.tags }}" role="alert">
+                            {{ message|safe }}
+                          </div>
+                          {% endif %}
+                      {% endfor %}
+                    {% endif %}
+                  </div>
+                  <div class="material-datatables">
+                    <table id="datatables" class="table-striped table-bordered table-hover"  width="100%" style="width:100%">
+                      <thead>
+                        <tr>
+                          <th>Sub Date</th>
+                          <th>Partner Code</th>
+                          <th>Partner Name</th>
+                          <th>Monthly Subs</th>
+                          <th>Yearly Subs</th>
+                          <th>Total Subs</th>
+                          <th>Monthly Revenue</th>
+                          <th>Yearly Revenue</th>
+                          <th>Total Revenue</th>
+                        </tr>
+                      </thead>
+                      {% if cmp_stats %}
+                        <tfoot>
+                          <tr>
+                            <th>Sub Date</th>
+                            <th>Partner Code</th>
+                            <th>Partner Name</th>
+                            <th>Monthly Subs</th>
+                            <th>Yearly Subs</th>                            
+                            <th>Total Subs</th>
+                            <th>Monthly Revenue</th>
+                            <th>Yearly Revenue</th>                            
+                            <th>Total Revenue</th>                      
+                          </tr>
+                        </tfoot>
+                      {% endif %}
+                      <tbody class="partners-list">
+                        {% if partner_stats_data %}
+                          {% for partner_stats in partner_stats_data %}
+                          <tr>
+                            <td>{{partner_stats.sub_date}}</td>
+                            <td>{{partner_stats.PartnerCode}}</td>
+                            <td>{{partner_stats.PartnerName}}</td>
+                            <td>{{partner_stats.MonthlySubs}}</td>
+                            <td>{{partner_stats.YearlySubs}}</td>
+                            <td>{{partner_stats.TotalSubs}}</td>
+                            <td>{{partner_stats.MonthlyAcqRev}} {% if partner_stats.MonthlyAcqRev != 0.0%} {{partner_stats.s_price_unit}} {% endif %}</td>
+                            <td>{{partner_stats.YearlyAcqRev}} {% if partner_stats.YearlyAcqRev != 0.0%}  {{partner_stats.s_price_unit}} {% endif %}</td>
+                            <td>{{partner_stats.acq_rev}} {% if partner_stats.acq_rev != 0.0%} {{partner_stats.s_price_unit}} {% endif %}</td>                            
+                          </tr>
+                          {% endfor %}
+                        {% endif %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <!-- end content-->
+              </div>
+              <!--  end card  -->
+            </div>
+            <!-- end col-md-12 -->
+          </div>
+          <!-- end row -->
+        </div>
+      </div>
+                    
+{% endblock content %}
+{% block extra_scripts %}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script type="text/javascript">
+  $(function() {
+
+ 
+  
+
+  var start_date = {{start_date}};
+  var end_date = {{end_date}};
+  if(start_date != null){
+      var start = '{{start_date}}';
+  }
+  else{
+    var start = moment();
+  }
+  if(end_date != null){
+    var end = '{{end_date}}';
+  }
+  else{
+    var end = moment();
+  }  
+
+  function cb(start, end) 
+  {
+  /*$('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));*/
+  $('input[name="reportrange"]').on('apply.daterangepicker', function(ev, picker) {
+      $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+  });
+  $('input[name="reportrange"]').on('cancel.daterangepicker', function(ev, picker) {
+      $(this).val('');
+  });
+  }
+
+ $('#reportrange').daterangepicker({
+  startDate: start,
+  endDate: end,
+  autoUpdateInput: false,
+  locale: {
+        format: 'DD-MM-YYYY',
+        cancelLabel: 'cancel'
+  },    
+  ranges: {
+    'Today': [moment(), moment()],
+    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+    'This Month': [moment().startOf('month'), moment().endOf('month')],
+    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+    }
+  }, cb);
+  locale: {
+          cancelLabel: 'Clear'
+      }
+  cb(start, end);
+  
+  });
+  
+
+  /*x = document.createElement("INPUT");
+  x.setAttribute("type", "cmpdate");
+  x.setAttribute("value", $('#reportrange span').html);
+*/
+  {% for date in Subscription %}
+      {{date.s_sub_date}}
+    {% endfor %}
+
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#datatables').DataTable({
+            "scrollX": true,
+            "scrollY": true,
+            "searching": false,
+            "lengthChange": false,
+            "info": false,
+            "scrollAlignY":true,
+            "scrollY":false     
+        });
+/*
+        var table = $('#datatable').DataTable();
+
+        // Edit record
+        table.on('click', '.edit', function() {
+            $tr = $(this).closest('tr');
+            var data = table.row($tr).data();
+            alert('You press on Row: ' + data[0] + ' ' + data[1] + ' ' + data[2] + '\'s row.');
+        });
+*/
+        $('.is-docusign-done').change(function() {
+            if(this.checked) {
+                // console.log($(this).val());
+                let partners_id = $(this).val();
+                let token = '{{csrf_token}}';
+                swal({
+                    title: '',
+                    text: 'Are you sure you have sent the DocuSign document?',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, I did!',
+                    cancelButtonText: 'No',
+                    confirmButtonClass: "btn btn-success",
+                    cancelButtonClass: "btn btn-danger",
+                    buttonsStyling: false
+                }).then(function(dismiss) {
+                    console.log(dismiss.dismiss);
+                    // dismiss can be 'overlay', 'cancel', 'close', 'esc', 'timer'
+                    if (dismiss.dismiss === 'cancel') {
+                        $(this).prop("checked", false);
+                        if(this.checked) {
+                            //alert('1');
+                        }else{
+                           // alert('1');
+
+                        }
+                        /*swal({
+                            title: 'Cancelled',
+                            text: 'Your imaginary file is safe :)',
+                            type: 'error',
+                            confirmButtonClass: "btn btn-info",
+                            buttonsStyling: false
+                        }).catch(swal.noop)*/
+                    }else{
+                        $.ajax({
+                            headers: { "X-CSRFToken": token },
+                            url: "{% url 'partners:document_sent' %}",
+                            type: "POST",
+                            data:  {'partner_id':partners_id},
+                            dataType: 'json',
+                            csrfmiddlewaretoken: "{{ csrf_token }}",
+                            beforeSend: function(){
+                                  
+                            },
+                            success: function (data) {
+                                console.log(data);
+                                if(data.status == 'OK'){
+                                    $('#docu_sent_div_'+partners_id).html('<i class="material-icons green">check_circle</i>');
+                                    swal({
+                                        title: 'Success!',
+                                        text: 'We have successfully updated the record',
+                                        type: 'success',
+                                        confirmButtonClass: "btn btn-success",
+                                        buttonsStyling: false
+                                    }).catch(swal.noop)
+                                }
+                                if(data.status == 'NOK'){
+                                    swal({
+                                        title: 'Error',
+                                        text: 'Some technical issue occured. Please contact the dev team',
+                                        type: 'warning',
+                                        confirmButtonClass: "btn btn-success",
+                                        buttonsStyling: false
+                                    }).catch(swal.noop)
+                                }
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                swal({
+                                    title: 'Error',
+                                    text: 'Some technical issue occured. Please contact the dev team',
+                                    type: 'warning',
+                                    confirmButtonClass: "btn btn-success",
+                                    buttonsStyling: false
+                                }).catch(swal.noop)
+                                console.log(jqXHR);
+                                console.log(textStatus);
+                                console.log(errorThrown);
+                            },
+                        });
+                    }
+                })
+            }
+        //$('#textbox1').val(this.checked);        
+        });
+    });
+  </script>
+{% endblock extra_scripts %}

@@ -1,0 +1,27 @@
+{% load static %}
+{% include "header.html" %}	
+<body class="">
+  	<div class="wrapper ">
+		{% include "left.html" %}
+		<!-- top navigation -->
+		<div class="main-panel">
+		{% include "mobile_navbar.html" %}
+
+		<!-- /top navigation -->
+		<!-- page content -->
+	 	{% block content %}
+		{% endblock content %}
+
+		</div>
+		<!-- /page content -->
+		<!-- footer content -->
+		{% include "footer.html" %}
+		<!-- /footer content -->
+		
+	{% include "scripts.html" %}
+
+	{% block extra_scripts %}
+	{% endblock extra_scripts %}
+ 	</div>
+</body>
+</html>

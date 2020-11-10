@@ -1,0 +1,70 @@
+{% load static %}
+<div class="sidebar" data-color="purple" data-background-color="white" data-image="{% static 'img/sidebar-1.jpg' %}">
+    <!--
+        Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
+        
+        Tip 2: you can also add an image using data-image tag
+        -->
+    <div class="logo">
+        <a href="{% url 'dashboard:dashboard' %}" class="simple-text logo-normal">
+        <img src="{% static 'img/protect4less_transparent.png' %}" style="margin-left: 6%;">
+        </a>
+    </div>
+    <div class="sidebar-wrapper">
+    	
+        <div class="user">
+          <div class="photo">
+            <img src="{% static 'img/default_profile.png' %}" />
+          </div>
+          <div class="user-info">
+            <a data-toggle="collapse" href="#collapseExample" class="username">
+              <span>
+                Hi {{ request.user.username}},<br>
+                <!-- <b class="caret"></b> -->
+              </span>
+            </a>
+           
+          </div>
+        </div>
+        <ul class="nav">
+            <li class="nav-item {% if 'dashboard' in request.get_full_path  %}active{% endif %}">
+                <a class="nav-link" href="{% url 'dashboard:dashboard' %}">
+                    <i class="material-icons">dashboard</i>
+                    <p>Dashboard</p>
+                </a>
+            </li>
+
+            <!-- Campaign Left Navigation -->
+
+         	<li class="nav-item {% if 'campaign' in request.get_full_path  %}active{% endif %}">
+                <a class="nav-link" data-toggle="collapse" href="#campaignlist">
+                    <i class="material-icons">important_devices</i>
+                    <p> Claims
+                        <b class="caret"></b>
+                    </p>
+                </a>
+                <div class="collapse {% if 'claim' in request.get_full_path  %}show{% endif %}" id="campaignlist">
+                    <ul class="nav">
+                        <li class="nav-item {% if '/claim/pending-amount' in request.get_full_path or '/partners/details' in request.get_full_path %}active{% endif %}">
+                            <a class="nav-link" href="{% url 'claim:pending-payment' %}">
+                            <span class="sidebar-mini">&nbsp;&nbsp;</span>
+                            <span class="sidebar-normal">Pending Amount</span>
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </div>
+            </li>
+
+        
+
+    
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'dashboard:logout' %}">
+                    <i class="material-icons">input</i>
+                    <p>Logout</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
