@@ -48,7 +48,7 @@ def received_payment(request):
 		error = 'Invalid Partner Id' if cpp_id is None else None
 
 	if error is None:
-		ClaimDAO.update_claim_pending_payment(column={"cpp_status":"paid"}, condition = {"cpp_id":cpp_id})
+		ClaimDAO.update_claim_pending_payment(column={"cpp_received_sc":"paid"}, condition = {"cpp_id":cpp_id})
 		response_data = {"record_updated":True}
 
 	status = True if error is None else False
