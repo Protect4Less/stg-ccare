@@ -1,7 +1,7 @@
 from .base import *
 
 DEBUG = True
-ALLOWED_HOSTS = ['127.0.0.1','stg-ccare.protect4less.com','ccare.protect4less.com']
+ALLOWED_HOSTS = ['127.0.0.1','stgccare.protect4less.com','ccare.protect4less.com']
 
 # INSTALLED_APPS += [
 #     'debug_toolbar'
