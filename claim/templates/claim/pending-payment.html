@@ -79,10 +79,10 @@
                             <td>{{v.cpp_polic_no}}</td>
                             <td>{{v.cpp_claim_no}}</td>
                             <td>{{v.cpp_charge_unit}} {{v.cpp_charge_amount}}</td>
-                            <td><span class="status {{v.cpp_status}}">{% if v.cpp_status == "paid"%}PAID{% else %} {{v.cpp_status|upper}}{% endif %}</span></td>
+                            <td><span class="status {{v.cpp_received_sc}}">{% if v.cpp_received_sc == "paid"%}PAID{% else %} {{v.cpp_received_sc|upper}}{% endif %}</span></td>
                             <td>
                                 <div id="docu_sent_div_{{v.cpp_id}}">
-                                {% if v.cpp_status == "pending" %}
+                                {% if v.cpp_received_sc == "pending" %}
                                     <div class="form-check mr-auto">
                                         <label class="form-check-label">
                                             <input class="form-check-input is-docusign-done" type="checkbox" value="{{v.cpp_id}}">
@@ -93,7 +93,7 @@
                                     </div>
                                 {% endif %}
 
-                                {% if v.cpp_status == "paid" %}
+                                {% if v.cpp_received_sc == "paid" %}
                                 <i class="material-icons green">check_circle</i>
                                 {% endif %}
                                 </div>
