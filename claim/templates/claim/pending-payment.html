@@ -75,7 +75,7 @@
                         {% if claim_data %}
                           {% for v in claim_data %}
                           <tr>
-                            <td>{{v.cpp_addedon|date:"d-M-Y"}}</td>
+                            <td>{{v.cpp_addedon|date:"d/m/Y"}}</td>
                             <td>{{v.cpp_polic_no}}</td>
                             <td>{{v.cpp_claim_no}}</td>
                             <td>{{v.cpp_charge_unit}} {{v.cpp_charge_amount}}</td>
