@@ -48,7 +48,7 @@
                     {% endif %}
                   </div>
                   <div class="material-datatables">
-                    <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                    <table id="datatables" class="table-striped table-bordered table-hover" cellspacing="0" style="width:100%">
                       <thead>
                         <tr>
                           <th>Claim Creation Date</th>
@@ -121,27 +121,36 @@
 <script>
     $(document).ready(function() {
         $('#datatables').DataTable({
-            "pagingType": "full_numbers",
-            "order": [[ 0, "desc" ]],
-            "lengthMenu": [
-              [10, 25, 50, -1],
-              [10, 25, 50, "All"]
-            ],
-            responsive: true,
-            language: {
-              search: "_INPUT_",
-              searchPlaceholder: "Search records",
-            }
+            "scrollX": true,
+            "scrollY": true,
+            "searching": false,
+            "lengthChange": false,
+            "info": false,
+            "scrollAlignY":true,
+            "scrollY":false 
+
+
+            // "pagingType": "full_numbers",
+            // "order": [[ 0, "desc" ]],
+            // "lengthMenu": [
+            //   [10, 25, 50, -1],
+            //   [10, 25, 50, "All"]
+            // ],
+            // responsive: true,
+            // language: {
+            //   search: "_INPUT_",
+            //   searchPlaceholder: "Search records",
+            // }
         });
 
-        var table = $('#datatable').DataTable();
+        // var table = $('#datatable').DataTable();
 
-        // Edit record
-        table.on('click', '.edit', function() {
-            $tr = $(this).closest('tr');
-            var data = table.row($tr).data();
-            alert('You press on Row: ' + data[0] + ' ' + data[1] + ' ' + data[2] + '\'s row.');
-        });
+        // // Edit record
+        // table.on('click', '.edit', function() {
+        //     $tr = $(this).closest('tr');
+        //     var data = table.row($tr).data();
+        //     alert('You press on Row: ' + data[0] + ' ' + data[1] + ' ' + data[2] + '\'s row.');
+        // });
 
         $('.is-docusign-done').change(function() {
             if(this.checked) {
