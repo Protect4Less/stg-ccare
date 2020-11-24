@@ -85,7 +85,7 @@
                                 {% if v.cpp_received_sc == "pending" %}
                                     <div class="form-check mr-auto text-center">
                                         <label class="form-check-label">
-                                            <input class="form-check-input is-docusign-done" type="checkbox" value="{{v.cpp_id}}">
+                                            <input class="form-check-input is-docusign-done" type="checkbox" id="id-{{v.cpp_id}}" value="{{v.cpp_id}}">
                                             <span class="form-check-sign">
                                                 <span class="check"></span>
                                             </span>
@@ -152,16 +152,16 @@
         //     alert('You press on Row: ' + data[0] + ' ' + data[1] + ' ' + data[2] + '\'s row.');
         // });
 
-             alert('view');
+        $("#id-77").on('change',function(){
+            alert('YES');
+        });
+        $("#id-5").on('change',function(){
+            alert('YES');
+        });
 
-        $('.is-docusign-done').on('change',function() {
-             alert('hiee');
-             debugger;
+        $('.is-docusign-done').change(function() {
             if(this.checked) {
-             debugger;
-
-                console.log($(this).val());
-                console.log('1');
+                // console.log($(this).val());
                 let cpp_id = $(this).val();
                 let token = '{{csrf_token}}';
                 swal({
@@ -175,18 +175,14 @@
                     cancelButtonClass: "btn btn-danger",
                     buttonsStyling: false
                 }).then(function(dismiss) {
-                    console.log('2');
-
                     console.log(dismiss.dismiss);
                     // dismiss can be 'overlay', 'cancel', 'close', 'esc', 'timer'
                     if (dismiss.dismiss === 'cancel') {
-                        console.log('3');
-
                         $(this).prop("checked", false);
                         if(this.checked) {
-                            alert('1');
+                            //alert('1');
                         }else{
-                           alert('2');
+                           // alert('1');
 
                         }
                         /*swal({
@@ -197,8 +193,6 @@
                             buttonsStyling: false
                         }).catch(swal.noop)*/
                     }else{
-                        console.log('4');
-
                         $.ajax({
                             headers: { "X-CSRFToken": token },
                             url: "{% url 'claim:received-payment' %}",
