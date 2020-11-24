@@ -152,7 +152,7 @@
         //     alert('You press on Row: ' + data[0] + ' ' + data[1] + ' ' + data[2] + '\'s row.');
         // });
 
-        $('.is-docusign-done').change(function() {
+        $('.is-docusign-done').on('click',function() {
             if(this.checked) {
                 console.log($(this).val());
                 console.log('1');
