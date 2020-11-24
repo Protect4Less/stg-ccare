@@ -154,7 +154,8 @@
 
         $('.is-docusign-done').change(function() {
             if(this.checked) {
-                // console.log($(this).val());
+                console.log($(this).val());
+                console.log('1');
                 let cpp_id = $(this).val();
                 let token = '{{csrf_token}}';
                 swal({
@@ -168,9 +169,13 @@
                     cancelButtonClass: "btn btn-danger",
                     buttonsStyling: false
                 }).then(function(dismiss) {
+                    console.log('2');
+
                     console.log(dismiss.dismiss);
                     // dismiss can be 'overlay', 'cancel', 'close', 'esc', 'timer'
                     if (dismiss.dismiss === 'cancel') {
+                        console.log('3');
+
                         $(this).prop("checked", false);
                         if(this.checked) {
                             //alert('1');
@@ -186,6 +191,8 @@
                             buttonsStyling: false
                         }).catch(swal.noop)*/
                     }else{
+                        console.log('4');
+
                         $.ajax({
                             headers: { "X-CSRFToken": token },
                             url: "{% url 'claim:received-payment' %}",
