@@ -127,7 +127,10 @@
             "lengthChange": false,
             "info": false,
             "scrollAlignY":true,
-            "scrollY":false 
+            "scrollY":false ,
+            "order": [[ 4, "asc" ]],
+            "pageLength": 50
+
             // "pagingType": "full_numbers",
             // "order": [[ 0, "desc" ]],
             // "lengthMenu": [
@@ -141,8 +144,20 @@
             // }
         });
 
+        // var table = $('#datatable').DataTable();
+
+        // // Edit record
+        // table.on('click', '.edit', function() {
+        //     $tr = $(this).closest('tr');
+        //     var data = table.row($tr).data();
+        //     alert('You press on Row: ' + data[0] + ' ' + data[1] + ' ' + data[2] + '\'s row.');
+        // });
+
+
+
         $('.is-docusign-done').change(function() {
             if(this.checked) {
+        
                 let cpp_id = $(this).val();
                 let token = '{{csrf_token}}';
                 swal({
