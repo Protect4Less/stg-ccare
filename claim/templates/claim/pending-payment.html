@@ -80,7 +80,7 @@
                             <td>{{v.cpp_claim_no}}</td>
                             <td>{{v.cpp_charge_unit}} {{v.cpp_charge_amount}}</td>
                             <td><span class="status {{v.cpp_received_sc}}">{% if v.cpp_received_sc == "paid"%}PAID{% else %} {{v.cpp_received_sc|upper}}{% endif %}</span></td>
-                            <td>
+                            <td style="text-align: center;">
                                 <div id="docu_sent_div_{{v.cpp_id}}">
                                 {% if v.cpp_received_sc == "pending" %}
                                     <div class="form-check mr-auto text-center">
