@@ -9,6 +9,8 @@ urlpatterns = [
 	re_path('dashboard/', include('dashboard.urls')),
     path('admin/', admin.site.urls),
    	re_path('claim/', include('claim.urls')),
+   	re_path('partners/', include('partners.urls')),
+
 	re_path('login/', LoginView.as_view(), name='login'),
 	
 ]

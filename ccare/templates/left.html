@@ -56,6 +56,27 @@
                 </div>
             </li>
 
+
+            <li class="nav-item {% if 'partners' in request.get_full_path  %}active{% endif %}">
+                <a class="nav-link" data-toggle="collapse" href="#parnters-upload-create-policy">
+                    <i class="material-icons">important_devices</i>
+                    <p> Partners
+                        <b class="caret"></b>
+                    </p>
+                </a>
+                <div class="collapse {% if 'partners' in request.get_full_path  %}show{% endif %}" id="parnters-upload-create-policy">
+                    <ul class="nav">
+                        <li class="nav-item {% if '/partners/upload-create-policy' in request.get_full_path %}active{% endif %}">
+                            <a class="nav-link" href="{% url 'partners:upload-create-policy' %}">
+                            <span class="sidebar-mini">&nbsp;&nbsp;</span>
+                            <span class="sidebar-normal">Upload & Create Policy</span>
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </div>
+            </li>
+
         
 
     
