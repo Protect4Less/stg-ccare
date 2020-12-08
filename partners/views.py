@@ -17,6 +17,8 @@ from backend.dao.ClaimDAO import ClaimDAO
 from django.conf import settings
 from django.http import HttpResponse, Http404
 import xlrd
+import openpyxl
+from django.db import connection
 
 # @login_required(login_url='/login')
 # def list(request):
@@ -34,23 +36,55 @@ import xlrd
 # 	return render(request, template_name, context)
 
 @login_required(login_url='/login')
+
 def upload_create_policy(request):
 	response = {}
 	error = None
+	excel_file = request.FILES.get('item_data_excel', None)
 
 
- 
-	loc = ("/home/tmt/Documents/Prem/p4l_item_invoiced.xlsx")
-	 
-	wb = xlrd.open_workbook(loc)
-	sheet = wb.sheet_by_index(0)
-	
-	sheet.cell_value(0, 0)
- 
-	print(sheet.row_values(1))
-	 
-	# Extracting number of columns
-	print(sheet.ncols)
+	if excel_file is not None:
+
+		excel_file = request.FILES['item_data_excel']
+		wb = openpyxl.load_workbook(excel_file)
+		worksheet = wb["Sheet1"]
+		print(worksheet)
+
+		excel_data = list()
+		cnt = 0
+		cntin = 0
+
+		excel_data = list()
+        # iterating over the rows and
+        # getting value from each cell in row
+		for row in worksheet.iter_rows():
+			row_data = list()
+			Query = "INSERT INTO `partners_offline_policy_data` ( `popd_invoice_no`, `popd_sku`, `popd_device`, `popd_brand`, `popd_model`, `popd_purchase_month`, `popd_first_name`, `popd_last_name`, `popd_email`, `popd_mobile_number`, `popd_imei_serial_no`, `popd_term_type`, `popd_device_value`, `popd_device_currency`, `popd_addedon`, `popd_updatedon`) VALUES ("
+			print("===================================================")
+			for cell in row:
+				Query = Query +"'"+ str(cell.value) + "', "
+
+				"'', '', '', '', '', NULL, '', '', '', '', '', '', '', '', '0', '0', '0', '', '', '', current_timestamp(), current_timestamp());"
+				#row_data.append(str(cell.value))
+				#excel_data.append(row_data)
+			Query = Query + "current_timestamp(), current_timestamp())"
+			print('\n\n', Query , '\n\n')
+			#print('\n\n\n', excel_data , '\n\n\n')
+			cursor = connection.cursor()
+			cursor.execute(Query)
+
+
+	# loc = ("/home/tmt/Documents/Prem/p4l_item_invoiced.xlsx")
+	#
+	# wb = xlrd.open_workbook(loc)
+	# sheet = wb.sheet_by_index(0)
+	#
+	# sheet.cell_value(0, 0)
+	#
+	# print(sheet.row_values(1))
+	#
+	# # Extracting number of columns
+	# print(sheet.ncols)
 	template_name = 'partners/upload_create_policy.html'
 	partners_obj = PartnersDAO.get_partners(condition={'partners_status':'active'})
 	print('partners_obj:: ',partners_obj)

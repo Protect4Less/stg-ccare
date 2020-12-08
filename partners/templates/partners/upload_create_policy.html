@@ -29,13 +29,13 @@
                                         {% endfor %}
                                     </ul>
                                 </div>
-                            <div class="clearfix"></div>  
+                            <div class="clearfix"></div>
                             </div>
                             <div class="col-md-12 col-sm-12">
                                 <br>
 
                                 <h4 class="title docusign">Excel Document</h4>
-                              
+
                                 <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                     <div class="fileinput-new thumbnail">
                                         <i class="material-icons green">insert_drive_file</i>
@@ -44,7 +44,7 @@
                                     <div>
                                         <span class="btn btn-rose btn-round btn-file">
                                             <span class="fileinput-new">Select Document</span>
-                                            <span class="fileinput-exists">Change</span>
+                                            <span class="fileinput-exists">Change</span>                                            
                                             <input type="file" name="item_data_excel" id="item_data_excel"/>
                                         </span>
 
@@ -59,7 +59,7 @@
                         <div class="clearfix"></div>
                     </div>
                 </form>
-            </div>      
+            </div>
         </div>
        <!--  <div class="card">
                   <form method="post" action="" id="partner_details_form" enctype="multipart/form-data">
@@ -87,9 +87,9 @@
                                 <h4 class="title docusign">DocuSign Document</h4>
                                 <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                 <div class="fileinput-new thumbnail">
-                                  
+
                                    <i class="material-icons green">insert_drive_file</i>
-                                  
+
                                 </div>
                                 <div class="fileinput-preview fileinput-exists thumbnail"></div>
                                 <div>
@@ -134,16 +134,16 @@
                                     <a class="btn btn-primary btn-round mat-raised-button" href="#" target="_blank">
                                     <span class="mat-button-wrapper">
                                     <i class="material-icons">dvr</i>
-                                           DocuSign Document 
+                                           DocuSign Document
                                      </span>
                                     </a>
                                   </div>
                             </div>
                         </div>
                         {% endif %}
-                      
+
                   </div>
-                 
+
                 </form>
             </div> -->
           </div>
@@ -152,17 +152,17 @@
           <!-- end row -->
         </div>
       </div>
-                    
+
 {% endblock content %}
 {% block extra_scripts %}
 <script>
-  
+
 
     $("#partner_code_list li a" ).click(function() {
       let key = $(this).attr("rel")
       let val = $(this).attr("val")
       $("#partner_code_btn").html(val);
-      // $("#approval_status").val(key); 
+      // $("#approval_status").val(key);
       // if(key == "active") {
       //   $('#partners_code').prop("disabled", false);
       // } else {
@@ -177,7 +177,7 @@
     }
 
     $("#item_data_excel").change(function(){
-        let doucment_type_allowed = ["application/pdf","application/vnd.openxmlformats-officedocument.wordprocessingml.document","application/msword"];
+        let doucment_type_allowed = [["application/xls","application/xlsx","application/pdf","application/vnd.openxmlformats-officedocument.wordprocessingml.document","application/msword"];
         $("#file_error").html("");
         $("#item_data_excel").css("border-color","#F0F0F0");
         if($('#item_data_excel')[0].files[0]){
@@ -190,7 +190,7 @@
                 $("#file_error").html("<p style='color:#FF0000'>File size is greater than 3MB</p>");
                 $("#item_data_excel").css("border-color","#FF0000");
                 return false;
-            } 
+            }
         }
         return true;
     });
