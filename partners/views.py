@@ -60,11 +60,8 @@ def upload_create_policy(request):
         # getting value from each cell in row
 		for row in worksheet.iter_rows():
 			row_data = list()
-			Query = "INSERT INTO `partners_offline_policy_data` ( `popd_invoice_no`, `popd_sku`, `popd_device`, `popd_brand`, `popd_model`, `popd_purchase_month`, `popd_first_name`, `popd_last_name`, `popd_email`, `popd_mobile_number`, `popd_imei_serial_no`, `popd_term_type`, `popd_device_value`, `popd_device_currency`, `popd_addedon`, `popd_updatedon`) VALUES ("
 			print("===================================================")
 			for cell in row:
-				Query = Query +"'"+ str(cell.value) + "', "
-
 				cell_coordinate = coordinate_from_string(cell.coordinate)
 				row_number = cell_coordinate[1]
 
@@ -167,14 +164,15 @@ def upload_create_policy(request):
 			brand_cell = "{}{}".format(brand_col, row_number )
 			brand_value =  str(worksheet[brand_cell].value)
 
-					#row_data.append(str(cell.value))
-				#excel_data.append(row_data)
+			#row_data.append(str(cell.value))
+			#excel_data.append(row_data)
 			# Query = "INSERT INTO `partners_offline_policy_data` ( `popd_invoice_no`, `popd_sku`, `popd_device`, `popd_brand`, `popd_model`, `popd_purchase_month`, `popd_first_name`, `popd_last_name`, `popd_email`, `popd_mobile_number`, `popd_imei_serial_no`, `popd_term_type`, `popd_device_value`, `popd_device_currency`, `popd_addedon`, `popd_updatedon`) VALUES ("
+			if row_number != 1:
+				Query = "INSERT INTO `partners_offline_policy_data` ( `popd_invoice_no`, `popd_sku`, `popd_device`, `popd_brand`, `popd_model`, `popd_purchase_month`, `popd_first_name`, `popd_last_name`, `popd_email`, `popd_mobile_number`, `popd_imei_serial_no`, `popd_term_type`, `popd_device_value`, `popd_device_currency`, `popd_addedon`, `popd_updatedon`) VALUES ('" + invoice_no_value +"','"+ sku_value +"','"+ device_value +"','"+ brand_value +"','"+ model_value +"','"+ purchase_month_value +"','"+ first_name_value +"','"+ last_name_value +"','"+ email_value +"','"+ mobile_number_value +"','"+ imei_serial_no_value +"','"+ term_type_value +"','"+ device_value_value +"','"  + device_currency_value +"'," + "current_timestamp(), current_timestamp())"
 
-			Query = Query + invoice_no_value +"," + sku_value +"," + device_value +"," + brand_value +"," + model_value +"," + purchase_month_value +"," + first_name_value +"," + last_name_value +"," + email_value +"," + mobile_number_value +"," + imei_serial_no_value +"," + term_type_value +"," + device_value_value +","  + device_currency_value +"," + "current_timestamp(), current_timestamp())"
-
-			print('\n\n\n', Query , '\n\n\n')
-			#sor.execute(Query)
+				print('\n\n', Query , '\n\n')
+				cursor = connection.cursor()
+				cursor.execute(Query)
 
 
 	# loc = ("/home/tmt/Documents/Prem/p4l_item_invoiced.xlsx")
