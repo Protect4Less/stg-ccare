@@ -17,6 +17,16 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
+                            <div class="col-md-12" style="margin: 10px;">
+                            {% if messages %}
+                                {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }}" id="alert-msg" role="alert">
+                                  {{ message|safe }}
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                            </div>
+
                             <div class="col-md-12">
                                 <div class="dropdown">
                                     <button href="#" class="btn dropdown-toggle" style="background-color:#9c27b0;border-color: #9c27b0;" id="partner_code_btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -28,6 +38,7 @@
                                         <li><a href="javascript:void(0)" rel="{{parnters.partners_code}}" val="{{parnters.partners_code}}">{{parnters.partners_code}} - {{parnters.partner_company_name}} - {{parnters.partners_name}}</a></li>
                                         {% endfor %}
                                     </ul>
+                                    <input id="partner_code" name="partner_code" type="hidden">
                                 </div>
                             <div class="clearfix"></div>
                             </div>
@@ -162,12 +173,7 @@
       let key = $(this).attr("rel")
       let val = $(this).attr("val")
       $("#partner_code_btn").html(val);
-      // $("#approval_status").val(key);
-      // if(key == "active") {
-      //   $('#partners_code').prop("disabled", false);
-      // } else {
-      //   $('#partners_code').val("");
-      // }
+      $('#partner_code').val(val);
     });
 
 
@@ -177,7 +183,7 @@
     }
 
     $("#item_data_excel").change(function(){
-        let doucment_type_allowed = [["application/xls","application/xlsx","application/pdf","application/vnd.openxmlformats-officedocument.wordprocessingml.document","application/msword"];
+        let doucment_type_allowed = ["application/xls","application/xlsx","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"];
         $("#file_error").html("");
         $("#item_data_excel").css("border-color","#F0F0F0");
         if($('#item_data_excel')[0].files[0]){

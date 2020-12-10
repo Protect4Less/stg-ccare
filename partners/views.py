@@ -42,9 +42,9 @@ def upload_create_policy(request):
 	response = {}
 	error = None
 	excel_file = request.FILES.get('item_data_excel', None)
+	partner_code = request.POST.get('partner_code',None)
 
-
-	if excel_file is not None:
+	if excel_file is not None and partner_code is not None:
 
 		excel_file = request.FILES['item_data_excel']
 		wb = openpyxl.load_workbook(excel_file)
@@ -110,8 +110,8 @@ def upload_create_policy(request):
 					term_type_col = term_type_coordinate[0]
 
 				if cell.value == "device_value" :
-					device_value_coordinate = coordinate_from_string(cell.coordinate)
-					device_value_col = device_value_coordinate[0]
+					invoice_value_coordinate = coordinate_from_string(cell.coordinate)
+					invoice_value_col = invoice_value_coordinate[0]
 
 				if cell.value == "device_currency" :
 					device_currency_coordinate = coordinate_from_string(cell.coordinate)
@@ -125,8 +125,8 @@ def upload_create_policy(request):
 			device_currency_cell = "{}{}".format(device_currency_col, row_number )
 			device_currency_value =  str(worksheet[device_currency_cell].value)
 
-			device_value_cell = "{}{}".format(device_value_col, row_number )
-			device_value_value =  str(worksheet[device_value_cell].value)
+			invoice_value_cell = "{}{}".format(invoice_value_col, row_number )
+			invoice_value_value =  str(worksheet[invoice_value_cell].value)
 
 			term_type_cell = "{}{}".format(term_type_col, row_number )
 			term_type_value =  str(worksheet[term_type_cell].value)
@@ -168,24 +168,31 @@ def upload_create_policy(request):
 			#excel_data.append(row_data)
 			# Query = "INSERT INTO `partners_offline_policy_data` ( `popd_invoice_no`, `popd_sku`, `popd_device`, `popd_brand`, `popd_model`, `popd_purchase_month`, `popd_first_name`, `popd_last_name`, `popd_email`, `popd_mobile_number`, `popd_imei_serial_no`, `popd_term_type`, `popd_device_value`, `popd_device_currency`, `popd_addedon`, `popd_updatedon`) VALUES ("
 			if row_number != 1:
-				Query = "INSERT INTO `partners_offline_policy_data` ( `popd_invoice_no`, `popd_sku`, `popd_device`, `popd_brand`, `popd_model`, `popd_purchase_month`, `popd_first_name`, `popd_last_name`, `popd_email`, `popd_mobile_number`, `popd_imei_serial_no`, `popd_term_type`, `popd_device_value`, `popd_device_currency`, `popd_addedon`, `popd_updatedon`) VALUES ('" + invoice_no_value +"','"+ sku_value +"','"+ device_value +"','"+ brand_value +"','"+ model_value +"','"+ purchase_month_value +"','"+ first_name_value +"','"+ last_name_value +"','"+ email_value +"','"+ mobile_number_value +"','"+ imei_serial_no_value +"','"+ term_type_value +"','"+ device_value_value +"','"  + device_currency_value +"'," + "current_timestamp(), current_timestamp())"
+				PartnersDAO.insert_partners_offline_policy_data({
+					'popd_partner_code':partner_code,
+					'popd_invoice_no':invoice_no_value,
+					'popd_invoice_value':invoice_value_value,
+					'popd_sku':sku_value,
+					'popd_device':device_value,
+					'popd_brand':brand_value,
+					'popd_model':model_value,
+					'popd_purchase_month':purchase_month_value,
+					'popd_first_name':first_name_value,
+					'popd_last_name':last_name_value,
+					'popd_email':email_value,
+					'popd_mobile_number':mobile_number_value,
+					'popd_imei_serial_no':imei_serial_no_value,
+					'popd_term_type':term_type_value,
+					'popd_device_currency':device_currency_value})
 
-				print('\n\n', Query , '\n\n')
-				cursor = connection.cursor()
-				cursor.execute(Query)
+				
+				# Query = "INSERT INTO `partners_offline_policy_data` ( `popd_invoice_no`, `popd_sku`, `popd_device`, `popd_brand`, `popd_model`, `popd_purchase_month`, `popd_first_name`, `popd_last_name`, `popd_email`, `popd_mobile_number`, `popd_imei_serial_no`, `popd_term_type`, `popd_device_value`, `popd_device_currency`, `popd_addedon`, `popd_updatedon`) VALUES ('" + invoice_no_value +"','"+ sku_value +"','"+ device_value +"','"+ brand_value +"','"+ model_value +"','"+ purchase_month_value +"','"+ first_name_value +"','"+ last_name_value +"','"+ email_value +"','"+ mobile_number_value +"','"+ imei_serial_no_value +"','"+ term_type_value +"','"+ invoice_value_value +"','"  + device_currency_value +"'," + "current_timestamp(), current_timestamp())"
 
+				# print('\n\n', Query , '\n\n')
+				# cursor = connection.cursor()
+				# cursor.execute(Query)
 
-	# loc = ("/home/tmt/Documents/Prem/p4l_item_invoiced.xlsx")
-	#
-	# wb = xlrd.open_workbook(loc)
-	# sheet = wb.sheet_by_index(0)
-	#
-	# sheet.cell_value(0, 0)
-	#
-	# print(sheet.row_values(1))
-	#
-	# # Extracting number of columns
-	# print(sheet.ncols)
+		messages.success(request, 'File Uploaded successfuly. Data will be processed')
 	template_name = 'partners/upload_create_policy.html'
 	partners_obj = PartnersDAO.get_partners(condition={'partners_status':'active'})
 	#print('partners_obj:: ',partners_obj)

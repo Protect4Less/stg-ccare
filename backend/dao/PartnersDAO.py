@@ -64,3 +64,25 @@ class PartnersDAO(object):
 		print(query)
 		cursor.execute(query,columns_s_value)
 		return cursor.lastrowid
+
+	def insert_partners_offline_policy_data(data):
+		inserted_id = ""
+		columns_s_value = []
+		cursor = connection.cursor()
+		column_keys = ""
+		column_values = ""
+		for k,v in data.items():
+			if k:
+				column_keys += k+", "
+				column_values += "%s,"
+				columns_s_value.append(str(v))
+			
+		column_keys += "popd_addedon"
+		column_values += "NOW()"
+		query = "INSERT INTO "+config('SITE_DB')+".`partners_offline_policy_data` ("+column_keys+") VALUES ("+column_values+")"
+		print(query)
+
+		cursor.execute(query,columns_s_value)
+		inserted_id = cursor.lastrowid
+
+		return inserted_id
