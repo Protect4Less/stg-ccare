@@ -167,7 +167,7 @@ def upload_create_policy(request):
 			#row_data.append(str(cell.value))
 			#excel_data.append(row_data)
 			# Query = "INSERT INTO `partners_offline_policy_data` ( `popd_invoice_no`, `popd_sku`, `popd_device`, `popd_brand`, `popd_model`, `popd_purchase_month`, `popd_first_name`, `popd_last_name`, `popd_email`, `popd_mobile_number`, `popd_imei_serial_no`, `popd_term_type`, `popd_device_value`, `popd_device_currency`, `popd_addedon`, `popd_updatedon`) VALUES ("
-			if row_number != 1:
+			if row_number != 1 and invoice_no_value is not None and sku_value is not None:
 				PartnersDAO.insert_partners_offline_policy_data({
 					'popd_partner_code':partner_code,
 					'popd_invoice_no':invoice_no_value,
