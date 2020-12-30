@@ -21,23 +21,8 @@ import openpyxl
 from django.db import connection
 from openpyxl.utils.cell import coordinate_from_string, column_index_from_string
 
-# @login_required(login_url='/login')
-# def list(request):
-# 	template_name = 'partners/list.html'
-# 	partners_data = PartnersDAO.get_partners()
-# 	context = {"partners_data":partners_data}
-# 	return render(request, template_name, context)
-
-# @login_required(login_url='/login')
-# def upload_create_policy(request):
-# 	template_name = 'claim/pending-payment.html'
-# 	claim_data = ClaimDAO.get_claim_pending_payment(condition={'cpp_payment_mode':'offline'})
-# 	print('claim_data:: ',claim_data)
-# 	context = {"claim_data":claim_data}
-# 	return render(request, template_name, context)
 
 @login_required(login_url='/login')
-
 def upload_create_policy(request):
 	response = {}
 	error = None
@@ -65,62 +50,66 @@ def upload_create_policy(request):
 				cell_coordinate = coordinate_from_string(cell.coordinate)
 				row_number = cell_coordinate[1]
 
-				if cell.value == "invoice_no" :
+				if cell.value in ["invoice_no","Invoice Number"] :
 					invoice_no_coordinate = coordinate_from_string(cell.coordinate)
 					invoice_no_col = invoice_no_coordinate[0]
 
-				if cell.value == "sku" :
+				if cell.value in ["sku","SKU ( Article )"] :
 					sku_coordinate = coordinate_from_string(cell.coordinate)
 					sku_col = sku_coordinate[0]
 
-				if cell.value == "device" :
+				if cell.value in ["device","Device"] :
 					device_coordinate = coordinate_from_string(cell.coordinate)
 					device_col = device_coordinate[0]
 
-				if cell.value == "model" :
+				if cell.value in ["model","Model"] :
 					model_coordinate = coordinate_from_string(cell.coordinate)
 					model_col = model_coordinate[0]
 
-				if cell.value == "purchase_month" :
+				if cell.value in ["brand","Brand"] :
+					brand_coordinate = coordinate_from_string(cell.coordinate)
+					brand_col = brand_coordinate[0]
+					
+				if cell.value in ["purchase_month","Purchase Date"] :
 					purchase_month_coordinate = coordinate_from_string(cell.coordinate)
 					purchase_month_col = purchase_month_coordinate[0]
 
-				if cell.value == "first_name" :
+				if cell.value in ["first_name","First Name"] :
 					first_name_coordinate = coordinate_from_string(cell.coordinate)
 					first_name_col = first_name_coordinate[0]
 
-				if cell.value == "last_name" :
+				if cell.value in ["last_name","Last Name"] :
 					last_name_coordinate = coordinate_from_string(cell.coordinate)
 					last_name_col = last_name_coordinate[0]
 
-				if cell.value == "email" :
+				if cell.value in ["email","Email ID"] :
 					email_coordinate = coordinate_from_string(cell.coordinate)
 					email_col = email_coordinate[0]
 
-				if cell.value == "mobile_number" :
+				if cell.value in ["mobile_number","Mobile Number"] :
 					mobile_number_coordinate = coordinate_from_string(cell.coordinate)
 					mobile_number_col = mobile_number_coordinate[0]
 
-				if cell.value == "imei_serial_no" :
+				if cell.value in ["imei_serial_no","Imei / Serial Nuber"] :
 					imei_serial_no_coordinate = coordinate_from_string(cell.coordinate)
 					imei_serial_no_col = imei_serial_no_coordinate[0]
 
-				if cell.value == "term_type" :
+				if cell.value in ["term_type","Term Type"] :
 					term_type_coordinate = coordinate_from_string(cell.coordinate)
 					term_type_col = term_type_coordinate[0]
 
-				if cell.value == "device_value" :
+				if cell.value in ["device_value","Device Value"] :
 					invoice_value_coordinate = coordinate_from_string(cell.coordinate)
 					invoice_value_col = invoice_value_coordinate[0]
 
-				if cell.value == "device_currency" :
+				if cell.value in ["device_currency","Device Currency"] :
 					device_currency_coordinate = coordinate_from_string(cell.coordinate)
 					device_currency_col = device_currency_coordinate[0]
+					print('device_currency_coordinate:: ',device_currency_coordinate)
 
-				if cell.value == "brand" :
-					brand_coordinate = coordinate_from_string(cell.coordinate)
-					brand_col = brand_coordinate[0]
+				
 
+			print('row_number:: ',row_number)
 
 			device_currency_cell = "{}{}".format(device_currency_col, row_number )
 			device_currency_value =  str(worksheet[device_currency_cell].value)
