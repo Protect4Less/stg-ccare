@@ -46,9 +46,22 @@ def upload_create_policy(request):
 		for row in worksheet.iter_rows():
 			row_data = list()
 			print("===================================================")
+			print(row)
 			for cell in row:
+
+				print('************************')
+				print('************************')
+				print(cell)
+				print('************************')
+				print('************************')
+
 				cell_coordinate = coordinate_from_string(cell.coordinate)
 				row_number = cell_coordinate[1]
+
+				if cell.value in ["",None," "]:
+					continue
+
+				cell.value = cell.value.strip() if isinstance(cell.value,str) else cell.value
 
 				if cell.value in ["invoice_no","Invoice Number"] :
 					invoice_no_coordinate = coordinate_from_string(cell.coordinate)
@@ -58,9 +71,17 @@ def upload_create_policy(request):
 					sku_coordinate = coordinate_from_string(cell.coordinate)
 					sku_col = sku_coordinate[0]
 
+				if cell.value in ["location","Location"] :
+					location_coordinate = coordinate_from_string(cell.coordinate)
+					location_col = location_coordinate[0]
+
 				if cell.value in ["device","Device"] :
 					device_coordinate = coordinate_from_string(cell.coordinate)
 					device_col = device_coordinate[0]
+
+				if cell.value in ["sub_device","Sub Device"] :
+					sub_device_coordinate = coordinate_from_string(cell.coordinate)
+					sub_device_col = sub_device_coordinate[0]
 
 				if cell.value in ["model","Model"] :
 					model_coordinate = coordinate_from_string(cell.coordinate)
@@ -69,7 +90,7 @@ def upload_create_policy(request):
 				if cell.value in ["brand","Brand"] :
 					brand_coordinate = coordinate_from_string(cell.coordinate)
 					brand_col = brand_coordinate[0]
-					
+
 				if cell.value in ["purchase_month","Purchase Date"] :
 					purchase_month_coordinate = coordinate_from_string(cell.coordinate)
 					purchase_month_col = purchase_month_coordinate[0]
@@ -107,79 +128,114 @@ def upload_create_policy(request):
 					device_currency_col = device_currency_coordinate[0]
 					print('device_currency_coordinate:: ',device_currency_coordinate)
 
+				if cell.value in ["Plan Ativation Date"] :
+					plan_ativation_date_coordinate = coordinate_from_string(cell.coordinate)
+					plan_ativation_date_col = plan_ativation_date_coordinate[0]
+					print('plan_ativation_date_col:: ',plan_ativation_date_col)
+
+				if cell.value in ["Device Name"] :
+					device_name_coordinate = coordinate_from_string(cell.coordinate)
+					device_name_col = device_name_coordinate[0]
+					print('device_name_col:: ',device_name_col)
+
 				
 
 			print('row_number:: ',row_number)
 
-			device_currency_cell = "{}{}".format(device_currency_col, row_number )
-			device_currency_value =  str(worksheet[device_currency_cell].value)
+			if 'device_currency_col' in locals():
+				device_currency_cell = "{}{}".format(device_currency_col, row_number )
+				device_currency_value =  str(worksheet[device_currency_cell].value)
 
-			invoice_value_cell = "{}{}".format(invoice_value_col, row_number )
-			invoice_value_value =  str(worksheet[invoice_value_cell].value)
+			if 'invoice_value_col' in locals():
+				invoice_value_cell = "{}{}".format(invoice_value_col, row_number )
+				invoice_value_value =  str(worksheet[invoice_value_cell].value)
 
-			term_type_cell = "{}{}".format(term_type_col, row_number )
-			term_type_value =  str(worksheet[term_type_cell].value)
+			if 'location_col' in locals():
+				location_value_cell = "{}{}".format(location_col, row_number )
+				location_value =  str(worksheet[location_value_cell].value)
 
-			imei_serial_no_cell = "{}{}".format(imei_serial_no_col, row_number )
-			imei_serial_no_value =  str(worksheet[imei_serial_no_cell].value)
+			if 'term_type_col' in locals():
+				term_type_cell = "{}{}".format(term_type_col, row_number )
+				term_type_value =  str(worksheet[term_type_cell].value)
 
-			mobile_number_cell = "{}{}".format(mobile_number_col, row_number )
-			mobile_number_value =  str(worksheet[mobile_number_cell].value)
+			if 'imei_serial_no_col' in locals():
+				imei_serial_no_cell = "{}{}".format(imei_serial_no_col, row_number )
+				imei_serial_no_value =  str(worksheet[imei_serial_no_cell].value)
 
-			email_cell = "{}{}".format(email_col, row_number )
-			email_value =  str(worksheet[email_cell].value)
+			if 'mobile_number_col' in locals():
+				mobile_number_cell = "{}{}".format(mobile_number_col, row_number )
+				mobile_number_value =  str(worksheet[mobile_number_cell].value)
 
-			last_name_cell = "{}{}".format(last_name_col, row_number )
-			last_name_value =  str(worksheet[last_name_cell].value)
+			if 'email_col' in locals():
+				email_cell = "{}{}".format(email_col, row_number )
+				email_value =  str(worksheet[email_cell].value)
 
-			first_name_cell = "{}{}".format(first_name_col, row_number )
-			first_name_value =  str(worksheet[first_name_cell].value)
+			if 'last_name_col' in locals():
+				last_name_cell = "{}{}".format(last_name_col, row_number )
+				last_name_value =  str(worksheet[last_name_cell].value)
 
-			purchase_month_cell = "{}{}".format(purchase_month_col, row_number )
-			purchase_month_value =  str(worksheet[purchase_month_cell].value)
+			if 'first_name_col' in locals():
+				first_name_cell = "{}{}".format(first_name_col, row_number )
+				first_name_value =  str(worksheet[first_name_cell].value)
 
-			model_cell = "{}{}".format(model_col, row_number )
-			model_value =  str(worksheet[model_cell].value)
+			if 'purchase_month_col' in locals():
+				purchase_month_cell = "{}{}".format(purchase_month_col, row_number )
+				purchase_month_value =  str(worksheet[purchase_month_cell].value)
 
-			device_cell = "{}{}".format(device_col, row_number )
-			device_value =  str(worksheet[device_cell].value)
+			if 'model_col' in locals():
+				model_cell = "{}{}".format(model_col, row_number )
+				model_value =  str(worksheet[model_cell].value)
 
-			invoice_no_cell = "{}{}".format(invoice_no_col, row_number )
-			invoice_no_value =  str(worksheet[invoice_no_cell].value)
+			if 'device_col' in locals():
+				device_cell = "{}{}".format(device_col, row_number )
+				device_value =  str(worksheet[device_cell].value)
 
-			sku_cell = "{}{}".format(sku_col, row_number )
-			sku_value =  str(worksheet[sku_cell].value)
+			if 'sub_device_col' in locals():
+				sub_device_cell = "{}{}".format(sub_device_col, row_number )
+				sub_device_value =  str(worksheet[sub_device_cell].value)
 
-			brand_cell = "{}{}".format(brand_col, row_number )
-			brand_value =  str(worksheet[brand_cell].value)
+			if 'invoice_no_col' in locals():
+				invoice_no_cell = "{}{}".format(invoice_no_col, row_number )
+				invoice_no_value =  str(worksheet[invoice_no_cell].value)
 
-			#row_data.append(str(cell.value))
-			#excel_data.append(row_data)
-			# Query = "INSERT INTO `partners_offline_policy_data` ( `popd_invoice_no`, `popd_sku`, `popd_device`, `popd_brand`, `popd_model`, `popd_purchase_month`, `popd_first_name`, `popd_last_name`, `popd_email`, `popd_mobile_number`, `popd_imei_serial_no`, `popd_term_type`, `popd_device_value`, `popd_device_currency`, `popd_addedon`, `popd_updatedon`) VALUES ("
-			if row_number != 1 and invoice_no_value is not None and sku_value is not None:
+			if 'sku_col' in locals():
+				sku_cell = "{}{}".format(sku_col, row_number )
+				sku_value =  str(worksheet[sku_cell].value)
+
+			if 'brand_col' in locals():
+				brand_cell = "{}{}".format(brand_col, row_number )
+				brand_value =  str(worksheet[brand_cell].value)
+
+			if 'plan_ativation_date_col' in locals():
+				plan_ativation_date_cell = "{}{}".format(plan_ativation_date_col, row_number )
+				plan_ativation_date_value =  str(worksheet[plan_ativation_date_cell].value)
+
+			if 'device_name_col' in locals():
+				device_name_cell = "{}{}".format(device_name_col, row_number )
+				device_name_value =  str(worksheet[device_name_cell].value)
+
+			if row_number != 1:
 				PartnersDAO.insert_partners_offline_policy_data({
 					'popd_partner_code':partner_code,
-					'popd_invoice_no':invoice_no_value,
-					'popd_invoice_value':invoice_value_value,
-					'popd_sku':sku_value,
-					'popd_device':device_value,
-					'popd_brand':brand_value,
-					'popd_model':model_value,
-					'popd_purchase_month':purchase_month_value,
-					'popd_first_name':first_name_value,
-					'popd_last_name':last_name_value,
-					'popd_email':email_value,
-					'popd_mobile_number':mobile_number_value,
-					'popd_imei_serial_no':imei_serial_no_value,
-					'popd_term_type':term_type_value,
-					'popd_device_currency':device_currency_value})
-
-				
-				# Query = "INSERT INTO `partners_offline_policy_data` ( `popd_invoice_no`, `popd_sku`, `popd_device`, `popd_brand`, `popd_model`, `popd_purchase_month`, `popd_first_name`, `popd_last_name`, `popd_email`, `popd_mobile_number`, `popd_imei_serial_no`, `popd_term_type`, `popd_device_value`, `popd_device_currency`, `popd_addedon`, `popd_updatedon`) VALUES ('" + invoice_no_value +"','"+ sku_value +"','"+ device_value +"','"+ brand_value +"','"+ model_value +"','"+ purchase_month_value +"','"+ first_name_value +"','"+ last_name_value +"','"+ email_value +"','"+ mobile_number_value +"','"+ imei_serial_no_value +"','"+ term_type_value +"','"+ invoice_value_value +"','"  + device_currency_value +"'," + "current_timestamp(), current_timestamp())"
-
-				# print('\n\n', Query , '\n\n')
-				# cursor = connection.cursor()
-				# cursor.execute(Query)
+					'popd_invoice_no': invoice_no_value if 'invoice_no_value' in locals() else '',
+					'popd_invoice_value':invoice_value_value if 'invoice_value_value' in locals() else '',
+					'popd_sku':sku_value if 'sku_value' in locals() else '',
+					'popd_location': location_value if 'location_value' in locals() else '',
+					'popd_device':device_value if 'device_value' in locals() else '',
+					'popd_device_name':device_name_value if 'device_name_value' in locals() else '',
+					'popd_sub_device': sub_device_value if 'sub_device_value' in locals() else '',
+					'popd_brand':brand_value if 'brand_value' in locals() else '',
+					'popd_model':model_value if 'model_value' in locals() else '',
+					'popd_purchase_month':purchase_month_value if 'purchase_month_value' in locals() else '',
+					'popd_first_name':first_name_value if 'first_name_value' in locals() else '',
+					'popd_last_name':last_name_value if 'last_name_value' in locals() else '',
+					'popd_email':email_value if 'email_value' in locals() else '',
+					'popd_mobile_number':mobile_number_value if 'mobile_number_value' in locals() else '',
+					'popd_imei_serial_no':imei_serial_no_value if 'imei_serial_no_value' in locals() else '',
+					'popd_term_type':term_type_value if 'term_type_value' in locals() else '',
+					'popd_device_currency':device_currency_value if 'device_currency_value' in locals() else '',
+					'popd_activation_date': plan_ativation_date_value if 'plan_ativation_date_value' in locals() else '',
+					})
 
 		messages.success(request, 'File Uploaded successfuly. Data will be processed')
 	template_name = 'partners/upload_create_policy.html'
