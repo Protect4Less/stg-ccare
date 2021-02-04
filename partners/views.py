@@ -126,21 +126,14 @@ def upload_create_policy(request):
 				if cell.value in ["device_currency","Device Currency"] :
 					device_currency_coordinate = coordinate_from_string(cell.coordinate)
 					device_currency_col = device_currency_coordinate[0]
-					print('device_currency_coordinate:: ',device_currency_coordinate)
 
-				if cell.value in ["Plan Ativation Date"] :
+				if cell.value in ["Plan Activation Date"] :
 					plan_ativation_date_coordinate = coordinate_from_string(cell.coordinate)
 					plan_ativation_date_col = plan_ativation_date_coordinate[0]
-					print('plan_ativation_date_col:: ',plan_ativation_date_col)
 
 				if cell.value in ["Device Name"] :
 					device_name_coordinate = coordinate_from_string(cell.coordinate)
 					device_name_col = device_name_coordinate[0]
-					print('device_name_col:: ',device_name_col)
-
-				
-
-			print('row_number:: ',row_number)
 
 			if 'device_currency_col' in locals():
 				device_currency_cell = "{}{}".format(device_currency_col, row_number )
