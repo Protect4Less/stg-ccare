@@ -67,7 +67,7 @@ def upload_create_policy(request):
 					invoice_no_coordinate = coordinate_from_string(cell.coordinate)
 					invoice_no_col = invoice_no_coordinate[0]
 
-				if cell.value in ["sku","SKU ( Article )"] :
+				if cell.value in ["sku","SKU ( Article )","Part#","Part"] :
 					sku_coordinate = coordinate_from_string(cell.coordinate)
 					sku_col = sku_coordinate[0]
 
@@ -83,7 +83,7 @@ def upload_create_policy(request):
 					sub_device_coordinate = coordinate_from_string(cell.coordinate)
 					sub_device_col = sub_device_coordinate[0]
 
-				if cell.value in ["model","Model"] :
+				if cell.value in ["model","Model", "Description"] :
 					model_coordinate = coordinate_from_string(cell.coordinate)
 					model_col = model_coordinate[0]
 
@@ -95,7 +95,7 @@ def upload_create_policy(request):
 					purchase_month_coordinate = coordinate_from_string(cell.coordinate)
 					purchase_month_col = purchase_month_coordinate[0]
 
-				if cell.value in ["first_name","First Name"] :
+				if cell.value in ["first_name","First Name", "Customer Name"] :
 					first_name_coordinate = coordinate_from_string(cell.coordinate)
 					first_name_col = first_name_coordinate[0]
 
@@ -111,7 +111,7 @@ def upload_create_policy(request):
 					mobile_number_coordinate = coordinate_from_string(cell.coordinate)
 					mobile_number_col = mobile_number_coordinate[0]
 
-				if cell.value in ["imei_serial_no","Imei / Serial Nuber"] :
+				if cell.value in ["imei_serial_no","Imei / Serial Nuber","IMEI Number"] :
 					imei_serial_no_coordinate = coordinate_from_string(cell.coordinate)
 					imei_serial_no_col = imei_serial_no_coordinate[0]
 
@@ -127,7 +127,7 @@ def upload_create_policy(request):
 					device_currency_coordinate = coordinate_from_string(cell.coordinate)
 					device_currency_col = device_currency_coordinate[0]
 
-				if cell.value in ["Plan Activation Date"] :
+				if cell.value in ["Plan Activation Date","Date"] :
 					plan_ativation_date_coordinate = coordinate_from_string(cell.coordinate)
 					plan_ativation_date_col = plan_ativation_date_coordinate[0]
 
@@ -135,6 +135,7 @@ def upload_create_policy(request):
 					device_name_coordinate = coordinate_from_string(cell.coordinate)
 					device_name_col = device_name_coordinate[0]
 
+			
 			if 'device_currency_col' in locals():
 				device_currency_cell = "{}{}".format(device_currency_col, row_number )
 				device_currency_value =  str(worksheet[device_currency_cell].value)
@@ -207,7 +208,7 @@ def upload_create_policy(request):
 				device_name_cell = "{}{}".format(device_name_col, row_number )
 				device_name_value =  str(worksheet[device_name_cell].value)
 
-			if row_number != 1:
+			if row_number != 1 and partner_code in ['1026']:
 				PartnersDAO.insert_partners_offline_policy_data({
 					'popd_partner_code':partner_code,
 					'popd_invoice_no': invoice_no_value if 'invoice_no_value' in locals() else '',
@@ -228,6 +229,20 @@ def upload_create_policy(request):
 					'popd_term_type':term_type_value if 'term_type_value' in locals() else '',
 					'popd_device_currency':device_currency_value if 'device_currency_value' in locals() else '',
 					'popd_activation_date': plan_ativation_date_value if 'plan_ativation_date_value' in locals() else '',
+					})
+
+			if row_number != 1 and partner_code in ['RG']:
+					PartnersDAO.insert_partners_redington_policy_data({
+					'prpd_partner_code':partner_code,
+					'prpd_device_name': model_value if 'model_value' in locals() else '',
+					'prpd_imei_serial_no': imei_serial_no_value if 'imei_serial_no_value' in locals() else '',
+					'prpd_device': 'Mobile Phone',
+					'prpd_brand': 'APPLE',
+					'prpd_model': model_value if 'model_value' in locals() else '',
+					'prpd_capacity': '',
+					'prpd_part_sku': sku_value if 'sku_value' in locals() else '',
+					'prpd_retailer_name': first_name_value if 'first_name_value' in locals() else '',
+					'prpd_invoice_dt': plan_ativation_date_value if 'plan_ativation_date_value' in locals() else '',
 					})
 
 		messages.success(request, 'File Uploaded successfuly. Data will be processed')
