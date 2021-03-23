@@ -208,7 +208,7 @@ def upload_create_policy(request):
 				device_name_cell = "{}{}".format(device_name_col, row_number )
 				device_name_value =  str(worksheet[device_name_cell].value)
 
-			if row_number != 1 and partner_code in ['1026']:
+			if row_number != 1 and partner_code in ['1026'] and email_value != 'None':
 				PartnersDAO.insert_partners_offline_policy_data({
 					'popd_partner_code':partner_code,
 					'popd_invoice_no': invoice_no_value if 'invoice_no_value' in locals() else '',
@@ -231,7 +231,11 @@ def upload_create_policy(request):
 					'popd_activation_date': plan_ativation_date_value if 'plan_ativation_date_value' in locals() else '',
 					})
 
-			if row_number != 1 and partner_code in ['RG']:
+			if row_number != 1 and partner_code in ['RG'] and imei_serial_no_value != 'None':
+
+					print('imei_serial_no_value:: ', imei_serial_no_value)
+					print('Type:: ', type(imei_serial_no_value))
+
 					PartnersDAO.insert_partners_redington_policy_data({
 					'prpd_partner_code':partner_code,
 					'prpd_device_name': model_value if 'model_value' in locals() else '',
