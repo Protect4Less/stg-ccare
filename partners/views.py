@@ -29,6 +29,8 @@ def upload_create_policy(request):
 	excel_file = request.FILES.get('item_data_excel', None)
 	partner_code = request.POST.get('partner_code',None)
 
+	partners_config = [{"id":1025, "name":'1025 - SAFARI HYPER MARKET - SADIQ ALI'},{"id":1026, "name":'1026 - NESTO GROUP - MR. FARHAN MOHAMED'},{"id":'RG', "name":'RG - Redington'},{"id":1030, "name": '1030 - TECH-OFFER (FLORENCE TRD)'},{ "id": 1031, "name":'1031 - THOMSUN PLAY'}, {"id":1014, "name":'1014 - Florance'}]
+
 	if excel_file is not None and partner_code is not None:
 
 		excel_file = request.FILES['item_data_excel']
@@ -208,7 +210,7 @@ def upload_create_policy(request):
 				device_name_cell = "{}{}".format(device_name_col, row_number )
 				device_name_value =  str(worksheet[device_name_cell].value)
 
-			if row_number != 1 and partner_code in ['1026'] and email_value != 'None':
+			if row_number != 1 and partner_code in ['1026','P00001'] and email_value != 'None':
 				PartnersDAO.insert_partners_offline_policy_data({
 					'popd_partner_code':partner_code,
 					'popd_invoice_no': invoice_no_value if 'invoice_no_value' in locals() else '',
@@ -253,5 +255,5 @@ def upload_create_policy(request):
 	template_name = 'partners/upload_create_policy.html'
 	partners_obj = PartnersDAO.get_partners(condition={'partners_status':'active'})
 	#print('partners_obj:: ',partners_obj)
-	context = {"partners_obj":partners_obj}
+	context = {"partners_obj":partners_obj, 'partners_config':partners_config}
 	return render(request, template_name, context)
