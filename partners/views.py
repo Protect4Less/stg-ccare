@@ -235,7 +235,6 @@ def upload_create_policy(request):
                 plan_total_price_value =  str(worksheet[plan_total_price_cell].value)
 
             if row_number != 1 and partner_code in ['1026','1030','1031', '1025', '1014', '1031','1033'] and email_value != 'None':
-                print("inside")
                 sku_value = sku_value if sku_value is not None and sku_value != "None" else ""
                 PartnersDAO.insert_partners_offline_policy_data({
                     'popd_partner_code':partner_code,
