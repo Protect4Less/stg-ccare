@@ -139,7 +139,6 @@ def upload_create_policy(request):
 
                 if cell.value in ["Device Name"] :
                     logger.debug('inside if of checkin device name')
-
                     device_name_coordinate = coordinate_from_string(cell.coordinate)
                     device_name_col = device_name_coordinate[0]
                 logger.debug('before calling plan price from excel file')
@@ -157,7 +156,7 @@ def upload_create_policy(request):
                 if cell.value in ["Plan Total Price"] :
                     plan_total_price_coordinate = coordinate_from_string(cell.coordinate)
                     plan_total_price_col = plan_total_price_coordinate[0]
-            # print('locals==================>',locals())
+
             if 'device_currency_col' in locals():
                 device_currency_cell = "{}{}".format(device_currency_col, row_number )
                 device_currency_value =  str(worksheet[device_currency_cell].value)
@@ -301,7 +300,7 @@ def upload_create_policy(request):
                     'prpd_retailer_name': first_name_value if 'first_name_value' in locals() else '',
                     'prpd_invoice_dt': plan_ativation_date_value if 'plan_ativation_date_value' in locals() else '',
                     })
-        print ("Cell Values!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", cell_values)
+        print ("Cell Values!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         messages.success(request, 'File Uploaded successfuly. Data will be processed')
     template_name = 'partners/upload_create_policy.html'
     partners_obj = PartnersDAO.get_partners(condition={'partners_status':'active'})
