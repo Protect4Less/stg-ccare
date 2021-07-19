@@ -20,6 +20,8 @@ from django.contrib import messages
 import openpyxl
 # from django.db import connection
 from openpyxl.utils.cell import coordinate_from_string, column_index_from_string
+import logging
+logger = logging.getLogger(__name__)
 
 
 @login_required(login_url='/login')
@@ -29,7 +31,7 @@ def upload_create_policy(request):
     excel_file = request.FILES.get('item_data_excel', None)
     partner_code = request.POST.get('partner_code',None)
 
-    partners_config = [{"id":1025, "name":'1025 - SAFARI HYPER MARKET - SADIQ ALI'},{"id":1026, "name":'1026 - NESTO GROUP - MR. FARHAN MOHAMED'},{"id":'RG', "name":'RG - Redington'},{"id":1030, "name": '1030 - TECH-OFFER (FLORENCE TRD)'},{ "id": 1031, "name":'1031 - THOMSUN PLAY'}, {"id":1014, "name":'1014 - Florance'}]
+    partners_config = [{"id":1025, "name":'1025 - SAFARI HYPER MARKET - SADIQ ALI'},{"id":1026, "name":'1026 - NESTO GROUP - MR. FARHAN MOHAMED'},{"id":'RG', "name":'RG - Redington'},{"id":1030, "name": '1030 - TECH-OFFER (FLORENCE TRD)'},{ "id": 1031, "name":'1031 - THOMSUN PLAY'}, {"id":1014, "name":'1014 - Florance'}, {"id":1035, "name":'1035 - jacky'}]
 
     if excel_file is not None and partner_code is not None:
 
@@ -43,21 +45,25 @@ def upload_create_policy(request):
         cntin = 0
 
         excel_data = list()
+        cell_values = []
         # iterating over the rows and
         # getting value from each cell in row
         for row in worksheet.iter_rows():
             row_data = list()
-            print("===================================================")
+            print("===================================================", row)
             for cell in row:
                 cell_coordinate = coordinate_from_string(cell.coordinate)
                 row_number = cell_coordinate[1]
-
+                print ("$$$$$$$$$$$$$$$$$$$$$$$$$$", cell_coordinate)
+                print ("$$$$$$$$$$$$$$$$$$$$$$$$$$", row_number)
                 if cell.value in ["",None," "]:
                     continue
 
                 cell.value = cell.value.strip() if isinstance(cell.value,str) else cell.value
+                print ("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&", cell.value)
+                cell_values.append(cell.value)
 
-                if cell.value in ["invoice_no","Invoice Number"] :
+                if cell.value in ["invoice_no", "Invoice Number"] :
                     invoice_no_coordinate = coordinate_from_string(cell.coordinate)
                     invoice_no_col = invoice_no_coordinate[0]
 
@@ -126,15 +132,21 @@ def upload_create_policy(request):
                     device_currency_col = device_currency_coordinate[0]
                     print('device_currency_coordinate:: ',device_currency_coordinate)
 
-                if cell.value in ["Plan Activation Date","Date"] :
+                if cell.value in ["Plan Activation Date","Date"] : # there is no field named Date or plan activation date in excel
                     plan_ativation_date_coordinate = coordinate_from_string(cell.coordinate)
                     plan_ativation_date_col = plan_ativation_date_coordinate[0]
+                logger.debug('before calling device name from excel file')
 
                 if cell.value in ["Device Name"] :
+                    logger.debug('inside if of checkin device name')
+
                     device_name_coordinate = coordinate_from_string(cell.coordinate)
                     device_name_col = device_name_coordinate[0]
+                logger.debug('before calling plan price from excel file')
 
                 if cell.value in ["Plan Price"] :
+                    logger.debug('inside if of checkin plan price')
+
                     plan_price_coordinate = coordinate_from_string(cell.coordinate)
                     plan_price_col = plan_price_coordinate[0]
 
@@ -145,7 +157,7 @@ def upload_create_policy(request):
                 if cell.value in ["Plan Total Price"] :
                     plan_total_price_coordinate = coordinate_from_string(cell.coordinate)
                     plan_total_price_col = plan_total_price_coordinate[0]
-
+            # print('locals==================>',locals())
             if 'device_currency_col' in locals():
                 device_currency_cell = "{}{}".format(device_currency_col, row_number )
                 device_currency_value =  str(worksheet[device_currency_cell].value)
@@ -213,28 +225,36 @@ def upload_create_policy(request):
             if 'brand_col' in locals():
                 brand_cell = "{}{}".format(brand_col, row_number )
                 brand_value =  str(worksheet[brand_cell].value)
+                print ("yyyyyyyyyyyyyy- brand_value", brand_value)
+
 
             if 'plan_ativation_date_col' in locals():
                 plan_ativation_date_cell = "{}{}".format(plan_ativation_date_col, row_number )
                 plan_ativation_date_value =  str(worksheet[plan_ativation_date_cell].value)
+                logger.debug("yyyyyyyyyyyyyy- plan_ativation_date_value", plan_ativation_date_value)
+
 
             if 'device_name_col' in locals():
                 device_name_cell = "{}{}".format(device_name_col, row_number )
                 device_name_value =  str(worksheet[device_name_cell].value)
 
+
             if 'plan_price_col' in locals():
+                logger.debug ('yeeeeeeeeeeeeszzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
                 plan_price_cell = "{}{}".format(plan_price_col, row_number )
                 plan_price_value =  str(worksheet[plan_price_cell].value)
+                logger.debug ("yyyyyyyyyyyyyy- plan_price_value", plan_price_value)
 
             if 'plan_tax_col' in locals():
                 plan_tax_cell = "{}{}".format(plan_tax_col, row_number )
                 plan_tax_value =  str(worksheet[plan_tax_cell].value)
+                logger.debug ("yyyyyyyyyyyyyy- plan_tax_value", plan_tax_value)
 
             if 'plan_total_price_col' in locals():
                 plan_total_price_cell = "{}{}".format(plan_total_price_col, row_number )
                 plan_total_price_value =  str(worksheet[plan_total_price_cell].value)
 
-            if row_number != 1 and partner_code in ['1026','1030','1031', '1025', '1014', '1031','1033'] and email_value != 'None':
+            if row_number != 1 and partner_code in ['1026','1030','1031', '1025', '1014', '1031','1033','1035'] and email_value != 'None':
                 print("inside")
                 sku_value = sku_value if sku_value is not None and sku_value != "None" else ""
                 PartnersDAO.insert_partners_offline_policy_data({
@@ -242,8 +262,11 @@ def upload_create_policy(request):
                     'popd_invoice_no': invoice_no_value if 'invoice_no_value' in locals() else '',
                     'popd_invoice_value':invoice_value_value if 'invoice_value_value' in locals() else '',
                     'popd_plan_price':plan_price_value if 'plan_price_value' in locals() else '',
+                    # 'popd_plan_price':'12',
                     'popd_plan_tax':plan_tax_value if 'plan_tax_value' in locals() else '',
+                    # 'popd_plan_tax':"0",
                     'popd_plan_total_price':plan_total_price_value if 'plan_total_price_value' in locals() else '',
+                    # 'popd_plan_total_price':'12',
                     'popd_sku':sku_value if 'sku_value' in locals() else '',
                     'popd_location': location_value if 'location_value' in locals() else '',
                     'popd_device':device_value if 'device_value' in locals() else '',
@@ -260,6 +283,7 @@ def upload_create_policy(request):
                     'popd_imei_serial_no':imei_serial_no_value if 'imei_serial_no_value' in locals() else '',
                     'popd_term_type':term_type_value if 'term_type_value' in locals() else '',
                     'popd_device_currency':device_currency_value if 'device_currency_value' in locals() else '',
+                    # 'popd_activation_date':'2021-07-16',
                     'popd_activation_date': plan_ativation_date_value if 'plan_ativation_date_value' in locals() else '',
                     })
 
@@ -277,7 +301,7 @@ def upload_create_policy(request):
                     'prpd_retailer_name': first_name_value if 'first_name_value' in locals() else '',
                     'prpd_invoice_dt': plan_ativation_date_value if 'plan_ativation_date_value' in locals() else '',
                     })
-
+        print ("Cell Values!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", cell_values)
         messages.success(request, 'File Uploaded successfuly. Data will be processed')
     template_name = 'partners/upload_create_policy.html'
     partners_obj = PartnersDAO.get_partners(condition={'partners_status':'active'})

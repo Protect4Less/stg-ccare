@@ -6,6 +6,8 @@ from dateutil.relativedelta import relativedelta
 
 import datetime
 from datetime import datetime
+import logging
+logger = logging.getLogger(__name__)
 
 class PartnersDAO(object):
 	
@@ -66,26 +68,31 @@ class PartnersDAO(object):
 		return cursor.lastrowid
 
 	def insert_partners_offline_policy_data(data):
-		inserted_id = ""
-		columns_s_value = []
-		cursor = connection.cursor()
-		column_keys = ""
-		column_values = ""
-		for k,v in data.items():
-			if k:
-				column_keys += k+", "
-				column_values += "%s,"
-				columns_s_value.append(str(v))
-			
-		column_keys += "popd_addedon"
-		column_values += "NOW()"
-		query = "INSERT INTO "+config('SITE_DB')+".`partners_offline_policy_data` ("+column_keys+") VALUES ("+column_values+")"
-		print(query)
+		try:
+			logger.debug('inside try')
+			inserted_id = ""
+			columns_s_value = []
+			cursor = connection.cursor()
+			column_keys = ""
+			column_values = ""
+			for k,v in data.items():
+				if k:
+					column_keys += k+", "
+					column_values += "%s,"
+					columns_s_value.append(str(v))
 
-		cursor.execute(query,columns_s_value)
-		inserted_id = cursor.lastrowid
+			column_keys += "popd_addedon"
+			column_values += "NOW()"
+			query = "INSERT INTO "+config('SITE_DB')+".`partners_offline_policy_data` ("+column_keys+") VALUES ("+column_values+")"
+			print("##############################", query)
 
-		return inserted_id
+			cursor.execute(query,columns_s_value)
+			inserted_id = cursor.lastrowid
+
+			return inserted_id
+		except Exception as e:
+			print ("EXCEPTIONSSSS", e)
+			logger.debug('EXCEPTIONS===================================================>>>>>>>>>>>>>>>>>>>>',e)
 
 	def insert_partners_redington_policy_data(data):
 		inserted_id = ""
