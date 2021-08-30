@@ -31,7 +31,7 @@ def upload_create_policy(request):
     excel_file = request.FILES.get('item_data_excel', None)
     partner_code = request.POST.get('partner_code',None)
 
-    partners_config = [{"id":1025, "name":'1025 - SAFARI HYPER MARKET - SADIQ ALI'},{"id":1026, "name":'1026 - NESTO GROUP - MR. FARHAN MOHAMED'},{"id":'RG', "name":'RG - Redington'},{"id":1030, "name": '1030 - TECH-OFFER (FLORENCE TRD)'},{ "id": 1031, "name":'1031 - THOMSUN PLAY'}, {"id":1014, "name":'1014 - Florance'}, {"id":1035, "name":'1035 - jacky'}]
+    partners_config = [{"id":1025, "name":'1025 - SAFARI HYPER MARKET - SADIQ ALI'},{"id":1026, "name":'1026 - NESTO GROUP - MR. FARHAN MOHAMED'},{"id":'RG', "name":'RG - Redington'},{"id":1030, "name": '1030 - TECH-OFFER (FLORENCE TRD)'},{ "id": 1031, "name":'1031 - THOMSUN PLAY'}, {"id":1014, "name":'1014 - Florance'}, {"id":1035, "name":'1035 - jacky'}, {"id":1037, "name":'1037 - esmart'}]
 
     if excel_file is not None and partner_code is not None:
 
@@ -253,7 +253,7 @@ def upload_create_policy(request):
                 plan_total_price_cell = "{}{}".format(plan_total_price_col, row_number )
                 plan_total_price_value =  str(worksheet[plan_total_price_cell].value)
 
-            if row_number != 1 and partner_code in ['1026','1030','1031', '1025', '1014', '1031','1033','1035'] and email_value != 'None':
+            if row_number != 1 and partner_code in ['1026','1030','1031', '1025', '1014', '1031','1033','1035','1037'] and email_value != 'None':
                 print("inside")
                 sku_value = sku_value if sku_value is not None and sku_value != "None" else ""
                 PartnersDAO.insert_partners_offline_policy_data({
