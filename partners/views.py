@@ -33,7 +33,10 @@ def upload_create_policy(request):
 
     partners_config = [{"id":1025, "name":'1025 - SAFARI HYPER MARKET - SADIQ ALI'},{"id":1026, "name":'1026 - NESTO GROUP - MR. FARHAN MOHAMED'},{"id":'RG', "name":'RG - Redington'},{"id":1030, "name": '1030 - TECH-OFFER (FLORENCE TRD)'},{ "id": 1031, "name":'1031 - THOMSUN PLAY'}, {"id":1014, "name":'1014 - Florance'}, {"id":1035, "name":'1035 - jacky'}, {"id":1037, "name":'1037 - esmart'}]
 
+    logger.info('partners_config',partners_config)
+
     if excel_file is not None and partner_code is not None:
+        logger.info('inside if 1')
 
         excel_file = request.FILES['item_data_excel']
         wb = openpyxl.load_workbook(excel_file)
@@ -51,16 +54,20 @@ def upload_create_policy(request):
         for row in worksheet.iter_rows():
             row_data = list()
             print("===================================================", row)
+            logger.info('===================================================', row)
+
             for cell in row:
                 cell_coordinate = coordinate_from_string(cell.coordinate)
                 row_number = cell_coordinate[1]
                 print ("$$$$$$$$$$$$$$$$$$$$$$$$$$", cell_coordinate)
                 print ("$$$$$$$$$$$$$$$$$$$$$$$$$$", row_number)
+                logger.info("$$$$$$$$$$$$$$$$$$$$$$$$$$", row_number)
                 if cell.value in ["",None," "]:
                     continue
 
                 cell.value = cell.value.strip() if isinstance(cell.value,str) else cell.value
                 print ("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&", cell.value)
+                logger.info("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&", cell.value)
                 cell_values.append(cell.value)
 
                 if cell.value in ["invoice_no", "Invoice Number"] :
@@ -131,6 +138,7 @@ def upload_create_policy(request):
                     device_currency_coordinate = coordinate_from_string(cell.coordinate)
                     device_currency_col = device_currency_coordinate[0]
                     print('device_currency_coordinate:: ',device_currency_coordinate)
+                    logger.info('device_currency_coordinate:: ',device_currency_coordinate)
 
                 if cell.value in ["Plan Activation Date","Date"] : # there is no field named Date or plan activation date in excel
                     plan_ativation_date_coordinate = coordinate_from_string(cell.coordinate)
@@ -225,6 +233,7 @@ def upload_create_policy(request):
                 brand_cell = "{}{}".format(brand_col, row_number )
                 brand_value =  str(worksheet[brand_cell].value)
                 print ("yyyyyyyyyyyyyy- brand_value", brand_value)
+                logger.info("yyyyyyyyyyyyyy- brand_value", brand_value)
 
 
             if 'plan_ativation_date_col' in locals():
