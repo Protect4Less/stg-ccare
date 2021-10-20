@@ -71,7 +71,7 @@ def upload_create_policy(request):
 
         excel_file = request.FILES['item_data_excel']
         wb = openpyxl.load_workbook(excel_file)
-        worksheet = wb["Sheet1"]
+        worksheet = wb.active
         print(worksheet)
 
         excel_data = list()
@@ -85,48 +85,41 @@ def upload_create_policy(request):
         if len(list(worksheet.iter_rows())) > 0:
             for row in worksheet.iter_rows():
                 row_data = list()
+                sku_value = None
+                print("===================================================")
                 for cell in row:
                     cell_coordinate = coordinate_from_string(cell.coordinate)
                     row_number = cell_coordinate[1]
-                    print("$$$$$$$$$$$$$$$$$$$$$$$$$$", cell_coordinate)
-                    print("$$$$$$$$$$$$$$$$$$$$$$$$$$", row_number)
+
                     if cell.value in ["", None, " "]:
                         continue
 
                     cell.value = cell.value.strip() if isinstance(cell.value, str) else cell.value
-                    print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&", cell.value)
-                    cell_values.append(cell.value)
 
                     if cell.value in ["invoice_no", "Invoice Number"]:
                         invoice_no_coordinate = coordinate_from_string(cell.coordinate)
                         invoice_no_col = invoice_no_coordinate[0]
                         count += 1
-
                     if cell.value in ["sku", "SKU ( Article )", "Part#", "Part"]:
                         sku_coordinate = coordinate_from_string(cell.coordinate)
                         sku_col = sku_coordinate[0]
                         count += 1
-
                     if cell.value in ["location", "Location"]:
                         location_coordinate = coordinate_from_string(cell.coordinate)
                         location_col = location_coordinate[0]
                         count += 1
-
                     if cell.value in ["device", "Device"]:
                         device_coordinate = coordinate_from_string(cell.coordinate)
                         device_col = device_coordinate[0]
                         count += 1
-
                     if cell.value in ["sub_device", "Sub Device"]:
                         sub_device_coordinate = coordinate_from_string(cell.coordinate)
                         sub_device_col = sub_device_coordinate[0]
-                        count += 1
 
                     if cell.value in ["model", "Model", "Description", "Model Name"]:
                         model_coordinate = coordinate_from_string(cell.coordinate)
                         model_col = model_coordinate[0]
                         count += 1
-
                     if cell.value in ["Model ID"]:
                         model_id_coordinate = coordinate_from_string(cell.coordinate)
                         model_id_col = model_id_coordinate[0]
@@ -135,65 +128,52 @@ def upload_create_policy(request):
                         brand_coordinate = coordinate_from_string(cell.coordinate)
                         brand_col = brand_coordinate[0]
                         count += 1
-
                     if cell.value in ["purchase_month", "Purchase Date"]:
                         purchase_month_coordinate = coordinate_from_string(cell.coordinate)
                         purchase_month_col = purchase_month_coordinate[0]
                         count += 1
-
                     if cell.value in ["first_name", "First Name", "Customer Name"]:
                         first_name_coordinate = coordinate_from_string(cell.coordinate)
                         first_name_col = first_name_coordinate[0]
-
+                        count += 1
                     if cell.value in ["last_name", "Last Name"]:
                         last_name_coordinate = coordinate_from_string(cell.coordinate)
                         last_name_col = last_name_coordinate[0]
-
+                        count += 1
                     if cell.value in ["email", "Email ID"]:
                         email_coordinate = coordinate_from_string(cell.coordinate)
                         email_col = email_coordinate[0]
                         count += 1
-
                     if cell.value in ["mobile_number", "Mobile Number"]:
                         mobile_number_coordinate = coordinate_from_string(cell.coordinate)
                         mobile_number_col = mobile_number_coordinate[0]
                         count += 1
-
                     if cell.value in ["imei_serial_no", "Imei / Serial Nuber", "IMEI Number"]:
                         imei_serial_no_coordinate = coordinate_from_string(cell.coordinate)
                         imei_serial_no_col = imei_serial_no_coordinate[0]
                         count += 1
-
                     if cell.value in ["term_type", "Term Type"]:
                         term_type_coordinate = coordinate_from_string(cell.coordinate)
                         term_type_col = term_type_coordinate[0]
                         count += 1
-
                     if cell.value in ["device_value", "Device Value"]:
                         invoice_value_coordinate = coordinate_from_string(cell.coordinate)
                         invoice_value_col = invoice_value_coordinate[0]
                         count += 1
-
                     if cell.value in ["device_currency", "Device Currency"]:
                         device_currency_coordinate = coordinate_from_string(cell.coordinate)
                         device_currency_col = device_currency_coordinate[0]
+                        print('device_currency_coordinate:: ', device_currency_coordinate)
                         count += 1
-
-                    if cell.value in ["Plan Activation Date",
-                                      "Date"]:  # there is no field named Date or plan activation date in excel
+                    if cell.value in ["Plan Activation Date", "Date"]:
                         plan_ativation_date_coordinate = coordinate_from_string(cell.coordinate)
                         plan_ativation_date_col = plan_ativation_date_coordinate[0]
-                    logger.debug('before calling device name from excel file')
 
                     if cell.value in ["Device Name"]:
-                        logger.debug('inside if of checkin device name')
                         device_name_coordinate = coordinate_from_string(cell.coordinate)
                         device_name_col = device_name_coordinate[0]
-                    logger.debug('before calling plan price from excel file')
 
                     if cell.value in ["Plan Price"]:
-                        logger.debug('inside if of checkin plan price')
-
                         plan_price_coordinate = coordinate_from_string(cell.coordinate)
                         plan_price_col = plan_price_coordinate[0]
 
@@ -272,31 +252,27 @@ def upload_create_policy(request):
                 if 'brand_col' in locals():
                     brand_cell = "{}{}".format(brand_col, row_number)
                     brand_value = str(worksheet[brand_cell].value)
-                    print("yyyyyyyyyyyyyy- brand_value", brand_value)
 
                 if 'plan_ativation_date_col' in locals():
                     plan_ativation_date_cell = "{}{}".format(plan_ativation_date_col, row_number)
                     plan_ativation_date_value = str(worksheet[plan_ativation_date_cell].value)
-                    logger.debug("yyyyyyyyyyyyyy- plan_ativation_date_value", plan_ativation_date_value)
 
                 if 'device_name_col' in locals():
                     device_name_cell = "{}{}".format(device_name_col, row_number)
                     device_name_value = str(worksheet[device_name_cell].value)
 
                 if 'plan_price_col' in locals():
-                    logger.debug('yeeeeeeeeeeeeszzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
                     plan_price_cell = "{}{}".format(plan_price_col, row_number)
                     plan_price_value = str(worksheet[plan_price_cell].value)
-                    logger.debug("yyyyyyyyyyyyyy- plan_price_value", plan_price_value)
 
                 if 'plan_tax_col' in locals():
                     plan_tax_cell = "{}{}".format(plan_tax_col, row_number)
                     plan_tax_value = str(worksheet[plan_tax_cell].value)
-                    logger.debug("yyyyyyyyyyyyyy- plan_tax_value", plan_tax_value)
 
                 if 'plan_total_price_col' in locals():
                     plan_total_price_cell = "{}{}".format(plan_total_price_col, row_number)
                     plan_total_price_value = str(worksheet[plan_total_price_cell].value)
+
                 if count < 14:
                     messages.warning(request, 'Some of major headings are missing, please check before uploading.')
                     break
