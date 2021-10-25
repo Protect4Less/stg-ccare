@@ -65,7 +65,8 @@ def upload_create_policy(request):
                        {"id": 1031, "name": '1031 - THOMSUN PLAY'}, {"id": 1014, "name": '1014 - Florance'},
                        {"id": 1035, "name": '1035 - jacky'}, {"id": 1037, "name": '1037 - esmart'},
                        # {"id": 1036, "name": '1036 - shopkee'},
-                       {"id": 1038, "name": '1038 - safeer'}]
+                       {"id": 1038, "name": '1038 - safeer'},
+                       {"id": 1039, "name": '1038 - AL NOOR AL ABYADH'}]
 
     if excel_file is not None and partner_code is not None:
 
@@ -277,7 +278,7 @@ def upload_create_policy(request):
                     messages.warning(request, 'Some of major headings are missing, please check before uploading.')
                     break
                 elif row_number != 1 and partner_code in ['1026', '1030', '1031', '1025', '1014', '1031', '1033', '1035',
-                                                        '1037', '1038'] and email_value != 'None':
+                                                        '1037', '1038', '1039'] and email_value != 'None':
                     print("inside")
                     sku_value = sku_value if sku_value is not None and sku_value != "None" else ""
                     PartnersDAO.insert_partners_offline_policy_data({
