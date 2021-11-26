@@ -69,7 +69,7 @@ def upload_create_policy(request):
                        {"id": 1040, "name": '1040 - AL NOOR AL ABYADH'},
                        {"id": 1041, "name": '1041 - Harman'}
                        ]
-    print (partner_code)
+    print ("partner_code",partner_code)
     if excel_file is not None and partner_code is not None:
 
         excel_file = request.FILES['item_data_excel']
