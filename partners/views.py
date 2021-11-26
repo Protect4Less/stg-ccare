@@ -66,7 +66,9 @@ def upload_create_policy(request):
                        {"id": 1035, "name": '1035 - jacky'}, {"id": 1037, "name": '1037 - esmart'},
                        # {"id": 1036, "name": '1036 - shopkee'},
                        {"id": 1038, "name": '1038 - safeer'},
-                       {"id": 1040, "name": '1040 - AL NOOR AL ABYADH'}]
+                       {"id": 1040, "name": '1040 - AL NOOR AL ABYADH'},
+                       {"id": 1041, "name": '1041 - Harman'}
+                       ]
     print (partner_code)
     if excel_file is not None and partner_code is not None:
 
@@ -273,12 +275,12 @@ def upload_create_policy(request):
                 if 'plan_total_price_col' in locals():
                     plan_total_price_cell = "{}{}".format(plan_total_price_col, row_number)
                     plan_total_price_value = str(worksheet[plan_total_price_cell].value)
-
+                print (count)
                 if count < 14:
                     messages.warning(request, 'Some of major headings are missing, please check before uploading.')
                     break
                 elif row_number != 1 and partner_code in ['1026', '1030', '1031', '1025', '1014', '1031', '1033', '1035',
-                                                        '1037', '1038', '1039','1040'] and email_value != 'None':
+                                                        '1037', '1038', '1039','1040', '1041'] and email_value != 'None':
                     print("inside")
                     sku_value = sku_value if sku_value is not None and sku_value != "None" else ""
                     PartnersDAO.insert_partners_offline_policy_data({
