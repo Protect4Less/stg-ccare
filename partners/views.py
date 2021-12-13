@@ -24,7 +24,6 @@ from openpyxl.utils.cell import coordinate_from_string, column_index_from_string
 
 @login_required(login_url='/login')
 def upload_create_policy(request):
-    exit()
     response = {}
     error = None
     excel_file = request.FILES.get('item_data_excel', None)
