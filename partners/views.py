@@ -24,6 +24,7 @@ from openpyxl.utils.cell import coordinate_from_string, column_index_from_string
 
 @login_required(login_url='/login')
 def upload_create_policy(request):
+    exit()
     response = {}
     error = None
     excel_file = request.FILES.get('item_data_excel', None)
@@ -32,7 +33,7 @@ def upload_create_policy(request):
     partners_config = [{"id":1025, "name":'1025 - SAFARI HYPER MARKET - SADIQ ALI'},{"id":1026, "name":'1026 - NESTO GROUP - MR. FARHAN MOHAMED'},{"id":'RG', "name":'RG - Redington'},{"id":1030, "name": '1030 - TECH-OFFER (FLORENCE TRD)'},{ "id": 1031, "name":'1031 - THOMSUN PLAY'}, {"id":1014, "name":'1014 - Florance'}]
 
     if excel_file is not None and partner_code is not None:
-        exit()
+
         excel_file = request.FILES['item_data_excel']
         wb = openpyxl.load_workbook(excel_file)
         worksheet = wb["Sheet1"]
