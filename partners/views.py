@@ -276,6 +276,10 @@ def upload_create_policy(request):
                     plan_total_price_cell = "{}{}".format(plan_total_price_col, row_number)
                     plan_total_price_value = str(worksheet[plan_total_price_cell].value)
                 print (count)
+                logger.debug("==start==")
+                logger.debug(count)
+                logger.debug("==end==")
+                exit()
                 if count < 14:
                     messages.warning(request, 'Some of major headings are missing, please check before uploading.')
                     break
