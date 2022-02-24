@@ -234,7 +234,7 @@ def upload_create_policy(request):
                 plan_total_price_cell = "{}{}".format(plan_total_price_col, row_number )
                 plan_total_price_value =  str(worksheet[plan_total_price_cell].value)
 
-            if row_number != 1 and partner_code in ['1026','1030','1031', '1025', '1014', '1038','1033','1043','1041','1036','1044','1035','1026'] and email_value != 'None':
+            if row_number != 1 and partner_code in ['1026','1030','1031', '1025', '1014', '1038','1033','1041','1036','1044','1035','1026'] and email_value != 'None':
                 sku_value = sku_value if sku_value is not None and sku_value != "None" else ""
                 PartnersDAO.insert_partners_offline_policy_data({
                     'popd_partner_code':partner_code,
@@ -275,6 +275,22 @@ def upload_create_policy(request):
                     'prpd_part_sku': sku_value if 'sku_value' in locals() else '',
                     'prpd_retailer_name': first_name_value if 'first_name_value' in locals() else '',
                     'prpd_invoice_dt': plan_ativation_date_value if 'plan_ativation_date_value' in locals() else '',
+                    })
+
+            #DYS
+            if row_number != 1 and partner_code in ['1043'] and imei_serial_no_value != 'None':
+
+                    PartnersDAO.insert_partners_redington_policy_data({
+                    'pdpd_partner_code':partner_code,
+                    'pdd_device_name': model_value if 'model_value' in locals() else '',
+                    'pdpd_imei_serial_no': imei_serial_no_value if 'imei_serial_no_value' in locals() else '',
+                    'pdpd_device': 'Mobile Phone',
+                    'pdpd_brand': 'APPLE',
+                    'pdpd_model': model_value if 'model_value' in locals() else '',
+                    'pdpd_capacity': '',
+                    'pdpd_part_sku': sku_value if 'sku_value' in locals() else '',
+                    'pdpd_retailer_name': first_name_value if 'first_name_value' in locals() else '',
+                    'pdpd_invoice_dt': plan_ativation_date_value if 'plan_ativation_date_value' in locals() else '',
                     })
 
         messages.success(request, 'File Uploaded successfuly. Data will be processed')
