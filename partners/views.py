@@ -282,7 +282,7 @@ def upload_create_policy(request):
 
                     PartnersDAO.insert_partners_dys_policy_data({
                     'pdpd_partner_code':partner_code,
-                    'pdd_device_name': model_value if 'model_value' in locals() else '',
+                    'pdpd_device_name': model_value if 'model_value' in locals() else '',
                     'pdpd_imei_serial_no': imei_serial_no_value if 'imei_serial_no_value' in locals() else '',
                     'pdpd_device': 'Mobile Phone',
                     'pdpd_brand': 'APPLE',
