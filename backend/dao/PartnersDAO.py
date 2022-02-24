@@ -127,7 +127,7 @@ class PartnersDAO(object):
 				column_values += "%s,"
 				columns_s_value.append(str(v))
 			
-		column_keys += "prpd_addedon"
+		column_keys += "pdpd_addedon"
 		column_values += "NOW()"
 		query = "INSERT INTO "+config('SITE_DB')+".`partners_dys_policy_data` ("+column_keys+") VALUES ("+column_values+")"
 		print(query)
