@@ -294,7 +294,7 @@ def upload_create_policy(request):
                     'pdpd_device_name':device_name_value if 'device_name_value' in locals() else '',
                     'pdpd_sub_device': sub_device_value if 'sub_device_value' in locals() else '',
                     'pdpd_brand':brand_value if 'brand_value' in locals() else '',
-                    'pdopd_model':model_value if 'model_value' in locals() else '',
+                    'pdpd_model':model_value if 'model_value' in locals() else '',
                     'pdpd_model_code':model_code_value if 'model_code_value' in locals() else '',
                     'pdpd_purchase_month':purchase_month_value if 'purchase_month_value' in locals() else '',
                     'pdpd_first_name':first_name_value if 'first_name_value' in locals() else '',
