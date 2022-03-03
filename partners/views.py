@@ -279,7 +279,7 @@ def upload_create_policy(request):
                     })
 
             #DYS
-            if row_number != 1 and partner_code in ['1043'] and imei_serial_no_value != 'None':
+            if row_number != 1 and partner_code in ['1043'] and email_value != 'None':
 
                     PartnersDAO.insert_partners_dys_policy_data({
                     'pdpd_partner_code':partner_code,
