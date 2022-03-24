@@ -29,7 +29,7 @@ def upload_create_policy(request):
     excel_file = request.FILES.get('item_data_excel', None)
     partner_code = request.POST.get('partner_code',None)
 
-    partners_config = [{"id":1025, "name":'1025 - SAFARI HYPER MARKET - SADIQ ALI'},{"id":1026, "name":'1026 - NESTO GROUP - MR. FARHAN MOHAMED'},{"id":'RG', "name":'RG - Redington'},{"id":1030, "name": '1030 - TECH-OFFER (FLORENCE TRD)'},{ "id": 1031, "name":'1031 - THOMSUN PLAY'}, {"id":1014, "name":'1014 - Florance'}, { "id": 1051, "name":'1051 - JACKYS RETAIL'}]
+    partners_config = [{"id":1025, "name":'1025 - SAFARI HYPER MARKET - SADIQ ALI'},{"id":1026, "name":'1026 - NESTO GROUP - MR. FARHAN MOHAMED'},{"id":'RG', "name":'RG - Redington'},{"id":1030, "name": '1030 - TECH-OFFER (FLORENCE TRD)'},{ "id": 1031, "name":'1031 - THOMSUN PLAY'}, {"id":1014, "name":'1014 - Florance'}, { "id": 1051, "name":'1051 - JACKYS RETAIL'}, { "id": 1064, "name":'1064 - Testing Company'}]
 
     if excel_file is not None and partner_code is not None:
 
