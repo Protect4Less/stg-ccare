@@ -20,6 +20,8 @@ from django.contrib import messages
 import openpyxl
 # from django.db import connection
 from openpyxl.utils.cell import coordinate_from_string, column_index_from_string
+import logging
+logger = logging.getLogger(__name__)
 
 
 @login_required(login_url='/login')
@@ -37,6 +39,8 @@ def upload_create_policy(request):
         wb = openpyxl.load_workbook(excel_file)
         worksheet = wb["Sheet1"]
         print(worksheet)
+
+        logger.debug(worksheet)
 
         excel_data = list()
         cnt = 0
@@ -237,7 +241,7 @@ def upload_create_policy(request):
             if row_number != 1 and partner_code in ['1026','1030','1031', '1025', '1014', '1038','1033','1041','1036','1044','1035','1026','1046', '1051','1049','1052','1040','1053','1064','1054', '1055', '1056'] and email_value != 'None':
 
                 sku_value = sku_value if sku_value is not None and sku_value != "None" else ""
-                PartnersDAO.insert_partners_offline_policy_data({
+                popd_data = PartnersDAO.insert_partners_offline_policy_data({
                     'popd_partner_code':partner_code,
                     'popd_invoice_no': invoice_no_value if 'invoice_no_value' in locals() else '',
                     'popd_invoice_value':invoice_value_value if 'invoice_value_value' in locals() else '',
@@ -262,6 +266,8 @@ def upload_create_policy(request):
                     'popd_device_currency':device_currency_value if 'device_currency_value' in locals() else '',
                     'popd_activation_date': plan_ativation_date_value if 'plan_ativation_date_value' in locals() else '',
                     })
+
+                logger.debug(popd_data)
 
             if row_number != 1 and partner_code in ['RG'] and imei_serial_no_value != 'None':
 
@@ -313,4 +319,5 @@ def upload_create_policy(request):
     partners_obj = PartnersDAO.get_partners(condition={'partners_status':'active'})
     #print('partners_obj:: ',partners_obj)
     context = {"partners_obj":partners_obj, 'partners_config':partners_config}
+
     return render(request, template_name, context)
