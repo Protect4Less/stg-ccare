@@ -31,7 +31,7 @@ def upload_create_policy(request):
     excel_file = request.FILES.get('item_data_excel', None)
     partner_code = request.POST.get('partner_code',None)
 
-    partners_config = [{"id":1025, "name":'1025 - SAFARI HYPER MARKET - SADIQ ALI'},{"id":1026, "name":'1026 - NESTO GROUP - MR. FARHAN MOHAMED'},{"id":'RG', "name":'RG - Redington'},{"id":1030, "name": '1030 - TECH-OFFER (FLORENCE TRD)'},{ "id": 1031, "name":'1031 - THOMSUN PLAY'}, {"id":1014, "name":'1014 - Florance'}, { "id": 1051, "name":'1051 - JACKYS RETAIL'},{ "id": 1040, "name":'1040 - AL NOOR AL ABYADH'},{ "id": 1053, "name":'1053 - ASIA MOBILE PHONE LLC'}, { "id": 1064, "name":'1064 - Testing Company'}, {"id": 1055, "name":'1055 - Al MALAKAH ALA ZAHABIYA LLC'}, {"id": 1056, "name":'1056 - AL TAMAM ELECTRONICS'}]
+    partners_config = [{"id":1025, "name":'1025 - SAFARI HYPER MARKET - SADIQ ALI'},{"id":1026, "name":'1026 - NESTO GROUP - MR. FARHAN MOHAMED'},{"id":'RG', "name":'RG - Redington'},{"id":1030, "name": '1030 - TECH-OFFER (FLORENCE TRD)'},{ "id": 1031, "name":'1031 - THOMSUN PLAY'}, {"id":1014, "name":'1014 - Florance'}, { "id": 1051, "name":'1051 - JACKYS RETAIL'},{ "id": 1040, "name":'1040 - AL NOOR AL ABYADH'},{ "id": 1053, "name":'1053 - ASIA MOBILE PHONE LLC'}, { "id": 1064, "name":'1064 - Testing Company'}, {"id": 1055, "name":'1055 - Al MALAKAH ALA ZAHABIYA LLC'}, {"id": 1056, "name":'1056 - AL TAMAM ELECTRONICS'}, { "id": 1052, "name":'1052 - GAME OVER PLUS ELECTRONICS'}]
 
     if excel_file is not None and partner_code is not None:
 
