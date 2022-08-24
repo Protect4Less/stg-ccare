@@ -44,7 +44,8 @@ def upload_create_policy(request):
         {"id": 1053, "name": '1053 - ASIA MOBILE PHONE LLC'},
         {"id": 1055, "name": '1055 - Al MALAKAH ALA ZAHABIYA LLC'},
         {"id": 1056, "name": '1056 - AL TAMAM ELECTRONICS'},
-        {"id": 1057, "name": '1057 - Asia Palace Mobile Phones LLC'}
+        {"id": 1057, "name": '1057 - Asia Palace Mobile Phones LLC'},
+        {"id": 1060, "name": '1060 - MASTERPIECE LLC'},
         ]
 
     if excel_file is not None and partner_code is not None:
@@ -260,12 +261,12 @@ def upload_create_policy(request):
                 xcqc_id_cell = "{}{}".format(xcqc_id_col, row_number )
                 xcqc_id_value =  str(worksheet[xcqc_id_cell].value)
 
-            if row_number != 1 and partner_code in ['1026','1030','1031', '1025', '1014', '1038','1033','1041','1036','1044','1035','1026','1046', '1051','1049','1052','1040','1053','1064','1054', '1055', '1056', '1057'] and email_value != 'None':
+            if row_number != 1 and partner_code in ['1026','1030','1031', '1025', '1014', '1038','1033','1041','1036','1044','1035','1026','1046', '1051','1049','1052','1040','1053','1064','1054', '1055', '1056', '1057', '1060'] and email_value != 'None':
 
                 sku_value = sku_value if sku_value is not None and sku_value != "None" else ""
                 popd_data = PartnersDAO.insert_partners_offline_policy_data({
                     'popd_partner_code':partner_code,
-                    'popd_xcqc_id':xcqc_id_value if 'xcqc_id_value' in locals() else '',
+                    # 'popd_xcqc_id':xcqc_id_value if 'xcqc_id_value' in locals() else '',
                     'popd_invoice_no': invoice_no_value if 'invoice_no_value' in locals() else '',
                     'popd_invoice_value':invoice_value_value if 'invoice_value_value' in locals() else '',
                     'popd_plan_price':plan_price_value if 'plan_price_value' in locals() else '',
