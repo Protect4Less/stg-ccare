@@ -27,7 +27,8 @@
                             {% endif %}
                             </div>
 
-                            <div class="col-md-12">
+                            {% comment %}
+                            <!-- <div class="col-md-12">
                                 <div class="dropdown">
                                     <button href="#" class="btn dropdown-toggle" style="background-color:#9c27b0;border-color: #9c27b0;" id="partner_code_btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                         Partner Code
@@ -41,7 +42,23 @@
                                     <input id="partner_code" name="partner_code" type="hidden">
                                 </div>
                             <div class="clearfix"></div>
+                            </div> -->
+                            {% endcomment %}
+
+                            <div class="col-md-12">
+                                <div class="dropdown">
+                                    <div class="col-lg-4 col-md-6 col-sm-3">
+                                        <select class="selectpicker" name="partner_code_list" id="partner_code_list" data-size="15"
+                                            data-style="btn btn-primary btn-round" title="partner_code_list" required
+                                            data-live-search="true" onchange="get_partner()">
+                                            <option disabled selected>Select Partner</option>{% for parnters in partners_obj %}
+                                            <option value="{{ parnters.partners_code }}">{{ parnters.partners_code }} - {{ parnters.partner_company_name }} - {{ parnters.partners_name }}</option>{% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <input id="partner_code" name="partner_code" type="hidden">
                             </div>
+
                             <div class="col-md-12 col-sm-12">
                                 <br>
 
@@ -168,13 +185,18 @@
 {% block extra_scripts %}
 <script>
 
+    {% comment %}
+    // $("#partner_code_list li a" ).click(function() {
+    //   let key = $(this).attr("rel")
+    //   let val = $(this).attr("val")
+    //   $("#partner_code_btn").html(val);
+    //   $('#partner_code').val(val);
+    // });
+    {% endcomment %}
 
-    $("#partner_code_list li a" ).click(function() {
-      let key = $(this).attr("rel")
-      let val = $(this).attr("val")
-      $("#partner_code_btn").html(val);
-      $('#partner_code').val(val);
-    });
+    function get_partner() {
+        $('#partner_code').val($("#partner_code_list").val());
+    }
 
 
     function validate() {
