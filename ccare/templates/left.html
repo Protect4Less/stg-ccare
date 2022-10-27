@@ -69,7 +69,14 @@
                         <li class="nav-item {% if '/partners/upload-create-policy' in request.get_full_path %}active{% endif %}">
                             <a class="nav-link" href="{% url 'partners:upload-create-policy' %}">
                             <span class="sidebar-mini">&nbsp;&nbsp;</span>
-                            <span class="sidebar-normal">Upload & Create Policy</span>
+                                <span class="sidebar-normal"><b>Upload & Create Policy</b></span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item {% if '/partners/upload_renewal_policy' in request.get_full_path %}active{% endif %}">
+                            <a class="nav-link" href="{% url 'partners:upload_renewal_policy' %}">
+                            <span class="sidebar-mini">&nbsp;</span>
+                                <span class="sidebar-normal"><b>Upload for Renewal Policy</b></span>
                             </a>
                         </li>
                         
