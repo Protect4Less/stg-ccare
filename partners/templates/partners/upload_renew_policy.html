@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style type="text/css">
+    .docusign {
+        margin-bottom: 0px;
+        margin-top: 0px;
+    }
+</style>
+<!-- <h2>Campaign List</h2> -->
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <form method="post" action="" id="partner_details_form" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="card-header card-header-primary">
+                            <h4 class="card-title">Upload Excel and Renew Policy Offline</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12" style="margin: 10px;">
+                                    {% if messages %}
+                                    {% for message in messages %}
+                                    <div class="alert alert-{{ message.tags }}" id="alert-msg" role="alert">
+                                        {{ message|safe }}
+                                    </div>
+                                    {% endfor %}
+                                    {% endif %}
+                                </div>
+
+                                {% comment %}
+                                <!-- <div class="col-md-12">
+                                    <div class="dropdown">
+                                        <button href="#" class="btn dropdown-toggle" style="background-color:#9c27b0;border-color: #9c27b0;" id="partner_code_btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                            Partner Code
+                                            <b class="caret"></b>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="partner_code_btn" id="partner_code_list">
+                                            {% for parnters in partners_obj %}
+                                            <li><a href="javascript:void(0)" rel="{{parnters.partners_code}}" val="{{parnters.partners_code}}">{{parnters.partners_code}} - {{parnters.partner_company_name}} - {{parnters.partners_name}}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                        <input id="partner_code" name="partner_code" type="hidden">
+                                    </div>
+                                <div class="clearfix"></div>
+                                </div> -->
+                                {% endcomment %}
+
+                                <div class="col-md-12">
+                                    <div class="dropdown">
+                                        <div class="col-lg-4 col-md-6 col-sm-3">
+                                            <select class="selectpicker" name="partner_code_list" id="partner_code_list"
+                                                    data-size="15"
+                                                    data-style="btn btn-primary btn-round" title="partner_code_list"
+                                                    required
+                                                    data-live-search="true" onchange="get_partner()">
+                                                <option disabled selected>Select Partner</option>{% for parnters in partners_obj %}
+                                                <option {% if parnters.partners_code != "1059" %}disabled{% endif %} value="{{ parnters.partners_code }}">{{ parnters.partners_code }} - {{ parnters.partner_company_name }} - {{ parnters.partners_name }}</option>{% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <input id="partner_code" name="partner_code" type="hidden">
+                                </div>
+
+                                <div class="col-md-12 col-sm-12">
+                                    <br>
+                                    <h4 class="title docusign">Renewal Policies Excel Document</h4>
+
+                                    <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                        <div class="fileinput-new thumbnail">
+                                            <i class="material-icons green">insert_drive_file</i>
+                                        </div>
+                                        <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                                        <div>
+                                        <span class="btn btn-rose btn-round btn-file">
+                                            <span class="fileinput-new">Select Document</span>
+                                            <span class="fileinput-exists">Change</span>
+                                            <input type="file" name="item_data_excel" id="item_data_excel"/>
+                                        </span>
+
+                                            <a href="#pablo" class="btn btn-danger btn-round fileinput-exists"
+                                               data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
+                                            <br><span><i> [Only .xls & .xlxs format is allowed]</i></span>
+                                            <span id="file_error"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary pull-right" onclick="return validate();">
+                                Upload
+                            </button>
+                            <div class="clearfix"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end col-md-12 -->
+    </div>
+    <!-- end row -->
+</div>
+
+{% endblock content %}
+{% block extra_scripts %}
+<script>
+
+    function get_partner() {
+        $('#partner_code').val($("#partner_code_list").val());
+    }
+
+
+    function validate() {
+
+        return true;
+    }
+
+    $("#item_data_excel").change(function () {
+        let doucment_type_allowed = ["application/xls", "application/xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"];
+        $("#file_error").html("");
+        $("#item_data_excel").css("border-color", "#F0F0F0");
+        if ($('#item_data_excel')[0].files[0]) {
+            if ($.inArray($('#item_data_excel')[0].files[0].type, doucment_type_allowed) == -1) {
+                $("#file_error").html("<p style='color:#FF0000'>File format not allowed</p>");
+            }
+            console.log($('#item_data_excel')[0].files[0]);
+            var file_size = $('#item_data_excel')[0].files[0].size;
+            if (file_size > 3072000) {
+                $("#file_error").html("<p style='color:#FF0000'>File size is greater than 3MB</p>");
+                $("#item_data_excel").css("border-color", "#FF0000");
+                return false;
+            }
+        }
+        return true;
+    });
+</script>
+{% endblock extra_scripts %}
