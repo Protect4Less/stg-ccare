@@ -159,7 +159,7 @@ class PartnersDAO(object):
 
             column_keys += "lpr_addedon, lpr_updatedon"
             column_values += "NOW(), NOW()"
-            query = "INSERT INTO" + config('SITE_DB') + ".`livlyt_pending_renewal` (" + column_keys + ") VALUES (" + column_values + ")"
+            query = "INSERT INTO " + config('SITE_DB') + ".`livlyt_pending_renewal` (" + column_keys + ") VALUES (" + column_values + ")"
 
             print()
             print("insert_livlyt query \t::", query)
