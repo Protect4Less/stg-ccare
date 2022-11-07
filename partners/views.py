@@ -434,8 +434,8 @@ def upload_renewal_policy(request):
                 renewal_data = PartnersDAO.insert_livlyt({
                     'lpr_u_id': policy_data[0]['up_userid_id'],
                     'lpr_s_id': policy_data[0]['up_s_id'],
-                    'lpr_policy_no': policy_no_value if 'old_policy_number' in locals() else '',
-                    'lpr_term_type_duration_months': term_type_duration_value if 'new_term_type_duration_months' in locals() else '',
+                    'lpr_policy_no': policy_no_value if 'policy_no_col' in locals() else '',
+                    'lpr_term_type_duration_months': term_type_duration_value if 'term_type_duration_col' in locals() else '',
                     'lpr_status': "pending",
                 })
             messages.success(request, 'File Uploaded Successfully. Data will be processed')
