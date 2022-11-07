@@ -342,7 +342,7 @@ def upload_create_policy(request):
                     'pdpd_activation_date': plan_ativation_date_value if 'plan_ativation_date_value' in locals() else '',
                 })
 
-        messages.success(request, 'File Uploaded successfuly. Data will be processed')
+        messages.success(request, 'File Uploaded successfully. Data will be processed')
     template_name = 'partners/upload_create_policy.html'
     partners_obj = PartnersDAO.get_partners(condition={'partners_status': 'active'})
     # print('partners_obj:: ',partners_obj)
@@ -354,7 +354,7 @@ def upload_create_policy(request):
 @login_required(login_url='/login')
 def upload_renewal_policy(request):
     response = {}
-    error = None
+    error = ''
     excel_file = request.FILES.get('item_data_excel', None)
     partner_code = request.POST.get('partner_code', None)
 
@@ -362,6 +362,91 @@ def upload_renewal_policy(request):
         {"id": 1059, "name": '1059 - LivLyt FZ LLC'},
     ]
 
+    if excel_file is not None and partner_code is not None:
+
+        excel_file = request.FILES['item_data_excel']
+        wb = openpyxl.load_workbook(excel_file)
+        worksheet = wb["Sheet1"]
+
+        excel_data = list()
+        cnt = 0
+        cntin = 0
+
+        excel_data = list()
+        # iterating over the rows and
+        # getting value from each cell in row
+        for row in worksheet.iter_rows():
+            row_data = list()
+            for cell in row:
+                cell_coordinate = coordinate_from_string(cell.coordinate)
+                row_number = cell_coordinate[1]
+
+                if cell.value in ["", None, " "]:
+                    continue
+
+                cell.value = cell.value.strip() if isinstance(cell.value, str) else cell.value
+
+                if cell.value in ["old_policy_number", "old policy number"]:
+                    policy_no_coordinate = coordinate_from_string(cell.coordinate)
+                    policy_no_col = policy_no_coordinate[0]
+
+                if cell.value in ["new_term_Type", "new term tpe"]:
+                    term_type_coordinate = coordinate_from_string(cell.coordinate)
+                    term_type_col = term_type_coordinate[0]
+
+                if cell.value in ["new_term_type_duration_months"]:
+                    term_type_duration_coordinate = coordinate_from_string(cell.coordinate)
+                    term_type_duration_col = term_type_duration_coordinate[0]
+
+            policy_no_value = None
+            term_type_value = None
+            term_type_duration_value = None
+
+            if 'policy_no_col' in locals():
+                policy_no_cell = "{}{}".format(policy_no_col, row_number)
+                policy_no_value = str(worksheet[policy_no_cell].value)
+
+            if 'term_type_col' in locals():
+                term_type_cell = "{}{}".format(term_type_col, row_number)
+                term_type_value = str(worksheet[term_type_cell].value)
+
+            if 'term_type_duration_col' in locals():
+                term_type_duration_cell = "{}{}".format(term_type_duration_col, row_number)
+                term_type_duration_value = str(worksheet[term_type_duration_cell].value)
+
+            policy_data = PartnersDAO.get_user_policy(
+                column='up_userid_id, up_s_id, up_partner_code',
+                condition={'up_policy_no': policy_no_value}
+            )
+            if row_number != 1 and len(policy_data) == 0:
+                error += f"Policy no. '{policy_no_value}' not found.<br>"
+
+            print()
+            print("policy_data \t:", policy_data)
+            print()
+
+            if len(policy_data) > 0 and policy_data[0]['up_partner_code'] != "1059":
+                error += f"Policy no. {policy_no_value} is not mapped with partner code 1059.<br>"
+
+        if error == '':
+            if row_number != 1 and partner_code in ['1059']:
+
+                renewal_data = PartnersDAO.insert_livlyt({
+                    'lpr_u_id': policy_data[0]['up_userid_id'],
+                    'lpr_s_id': policy_data[0]['up_s_id'],
+                    'lpr_policy_no': policy_no_value if 'old_policy_number' in locals() else '',
+                    'lpr_term_type_duration_months': term_type_duration_value if 'new_term_type_duration_months' in locals() else '',
+                    'lpr_status': "pending",
+                })
+            messages.success(request, 'File Uploaded Successfully. Data will be processed')
+
+        else:
+            err_msg = "No policy has been processed, Fix the below issue and re-upload the excel.<br>"
+            messages.error(request, err_msg + str(error))
+
+        return redirect('partners:upload_renewal_policy')
+
+    # Partners Obj
     partners_obj = PartnersDAO.get_partners(condition={'partners_status': 'active'})
 
     template_name = 'partners/upload_renew_policy.html'
