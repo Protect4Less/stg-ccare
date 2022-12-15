@@ -43,6 +43,7 @@ def upload_create_policy(request):
         {"id": 1051, "name": '1051 - JACKYS RETAIL'},
         {"id": 1052, "name": '1052 - GAME OVER PLUS ELECTRONICS'},
         {"id": 1053, "name": '1053 - ASIA MOBILE PHONE LLC'},
+        {"id": 1054, "name": '1054 - ABUDHABI COOP'},
         {"id": 1055, "name": '1055 - Al MALAKAH ALA ZAHABIYA LLC'},
         {"id": 1056, "name": '1056 - AL TAMAM ELECTRONICS'},
         {"id": 1057, "name": '1057 - Asia Palace Mobile Phones LLC'},
@@ -269,7 +270,7 @@ def upload_create_policy(request):
 
                 if row_number != 1 and partner_code in ['1026', '1030', '1031', '1025', '1014', '1038', '1033', '1041',
                                                         '1036', '1044', '1035', '1026', '1046', '1051', '1049', '1052',
-                                                        '1040', '1053', '1064', '1054', '1055', '1056', '1057', '1059',
+                                                        '1040', '1053', '1054', '1055', '1056', '1057', '1059',
                                                         '1060', '1061', '1062', '1064', '1065'] and email_value != 'None':
                     sku_value = sku_value if sku_value is not None and sku_value != "None" else ""
                     popd_data = PartnersDAO.insert_partners_offline_policy_data({
@@ -362,6 +363,10 @@ def upload_renewal_policy(request):
     excel_file = request.FILES.get('item_data_excel', None)
     partner_code = request.POST.get('partner_code', None)
 
+    policy_no_value = None
+    term_type_value = None
+    term_type_duration_value = None
+
     partners_config = [
         {"id": 1059, "name": '1059 - LivLyt FZ LLC'},
     ]
@@ -402,10 +407,6 @@ def upload_renewal_policy(request):
                     term_type_duration_coordinate = coordinate_from_string(cell.coordinate)
                     term_type_duration_col = term_type_duration_coordinate[0]
 
-            policy_no_value = None
-            term_type_value = None
-            term_type_duration_value = None
-
             if 'policy_no_col' in locals():
                 policy_no_cell = "{}{}".format(policy_no_col, row_number)
                 policy_no_value = str(worksheet[policy_no_cell].value)
@@ -425,27 +426,28 @@ def upload_renewal_policy(request):
             if row_number != 1 and len(policy_data) == 0:
                 error += f"Policy no. '{policy_no_value}' not found.<br>"
 
-            print()
-            print("policy_data \t:", policy_data)
-            print()
+            # print()
+            # print("policy_data \t:", policy_data)
+            # print()
 
             if len(policy_data) > 0 and policy_data[0]['up_partner_code'] != "1059":
                 error += f"Policy no. {policy_no_value} is not mapped with partner code 1059.<br>"
 
+            if error == '':
+                if row_number != 1 and partner_code in ['1059']:
+
+                    renewal_data = PartnersDAO.insert_livlyt({
+                        'lpr_u_id': policy_data[0]['up_userid_id'],
+                        'lpr_s_id': policy_data[0]['up_s_id'],
+                        'lpr_policy_no': policy_no_value if 'policy_no_col' in locals() else '',
+                        'lpr_term_type_duration_months': term_type_duration_value if 'term_type_duration_col' in locals() else '',
+                        'lpr_pending_renewal_months': term_type_duration_value if 'term_type_duration_col' in locals() else '',
+                        'lpr_status': "pending",
+                        'renew_old_policy': 'true'
+                    })
+
         if error == '':
-            if row_number != 1 and partner_code in ['1059']:
-
-                renewal_data = PartnersDAO.insert_livlyt({
-                    'lpr_u_id': policy_data[0]['up_userid_id'],
-                    'lpr_s_id': policy_data[0]['up_s_id'],
-                    'lpr_policy_no': policy_no_value if 'policy_no_col' in locals() else '',
-                    'lpr_term_type_duration_months': term_type_duration_value if 'term_type_duration_col' in locals() else '',
-                    'lpr_pending_renewal_months': term_type_duration_value if 'term_type_duration_col' in locals() else '',
-                    'lpr_status': "pending",
-                    'renew_old_policy': 'true'
-                })
             messages.success(request, 'File Uploaded Successfully. Data will be processed')
-
         else:
             err_msg = "No policy has been processed, Fix the below issue and re-upload the excel.<br>"
             messages.error(request, err_msg + str(error))
