@@ -53,6 +53,9 @@ def upload_create_policy(request):
         {"id": 1062, "name": '1062 - GEANT HYPERMARKET'},
         {"id": 1064, "name": '1064 - SOL SUPER CLICK TRADING L.L.C'},
         {"id": 1065, "name": '1065 - ASIA MOBILE PHONE'},
+        {"id": 1066, "name": '1066 - Denaster General Trading LLC'},
+        {"id": 1067, "name": '1067 - P4LOFFLINE'},
+        {"id": 1068, "name": '1068 - Fixsquad - Offline'},
     ]
     try:
         if excel_file is not None and partner_code is not None:
@@ -271,7 +274,7 @@ def upload_create_policy(request):
                 if row_number != 1 and partner_code in ['1026', '1030', '1031', '1025', '1014', '1038', '1033', '1041',
                                                         '1036', '1044', '1035', '1026', '1046', '1051', '1049', '1052',
                                                         '1040', '1053', '1054', '1055', '1056', '1057', '1059',
-                                                        '1060', '1061', '1062', '1064', '1065'] and email_value != 'None':
+                                                        '1060', '1061', '1062', '1064', '1065', '1066', '1067', '1068'] and email_value != 'None':
                     sku_value = sku_value if sku_value is not None and sku_value != "None" else ""
                     popd_data = PartnersDAO.insert_partners_offline_policy_data({
                         'popd_partner_code': partner_code,
