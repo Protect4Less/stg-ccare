@@ -58,6 +58,7 @@ def upload_create_policy(request):
         {"id": 1068, "name": '1068 - Fixsquad - Offline'},
         {"id": 1069, "name": '1069 - REVENT'},
         {"id": 1070, "name": '1070 - Fone Garage'},
+        {"id": 1071, "name": '1071 - Papita Trading LLC'},
     ]
     try:
         if excel_file is not None and partner_code is not None:
@@ -100,7 +101,7 @@ def upload_create_policy(request):
                         location_coordinate = coordinate_from_string(cell.coordinate)
                         location_col = location_coordinate[0]
 
-                    if cell.value in ["device", "Device"]:
+                    if cell.value in ["device", "Device", "Category"]:
                         device_coordinate = coordinate_from_string(cell.coordinate)
                         device_col = device_coordinate[0]
 
@@ -120,7 +121,7 @@ def upload_create_policy(request):
                         brand_coordinate = coordinate_from_string(cell.coordinate)
                         brand_col = brand_coordinate[0]
 
-                    if cell.value in ["purchase_month", "Purchase Date"]:
+                    if cell.value in ["purchase_month", "Purchase Date", "Device Purchase Date"]:
                         purchase_month_coordinate = coordinate_from_string(cell.coordinate)
                         purchase_month_col = purchase_month_coordinate[0]
 
@@ -140,7 +141,7 @@ def upload_create_policy(request):
                         mobile_number_coordinate = coordinate_from_string(cell.coordinate)
                         mobile_number_col = mobile_number_coordinate[0]
 
-                    if cell.value in ["imei_serial_no", "Imei / Serial Nuber", "IMEI Number"]:
+                    if cell.value in ["imei_serial_no", "Imei / Serial Nuber", "IMEI Number", "IMEI No.", "IMEI No"]:
                         imei_serial_no_coordinate = coordinate_from_string(cell.coordinate)
                         imei_serial_no_col = imei_serial_no_coordinate[0]
 
@@ -322,6 +323,20 @@ def upload_create_policy(request):
                         'prpd_part_sku': sku_value if 'sku_value' in locals() else '',
                         'prpd_retailer_name': first_name_value if 'first_name_value' in locals() else '',
                         'prpd_invoice_dt': plan_ativation_date_value if 'plan_ativation_date_value' in locals() else '',
+                    })
+
+                if row_number != 1 and partner_code in ['1071'] and imei_serial_no_value != 'None':
+                    PartnersDAO.insert_partners_papita_policy_data({
+                        'pppd_partner_code': partner_code,
+                        'pppd_invoice_no': invoice_no_value if 'invoice_no_value' in locals() else '',
+                        'pppd_category': device_value if 'device_value' in locals() else '',
+                        'pppd_brand': brand_value if 'brand_value' in locals() else '',
+                        'pppd_model': model_value if 'model_value' in locals() else '',
+                        'pppd_purchase_date': purchase_month_value if 'purchase_month_value' in locals() else '',
+                        'pppd_imei_no': imei_serial_no_value if 'imei_serial_no_value' in locals() else '',
+                        'pppd_term_type': term_type_value if 'term_type_value' in locals() else '',
+                        'pppd_invoice_value': invoice_value_value if 'invoice_value_value' in locals() else '',
+                        'pppd_status': 'pending',
                     })
 
                 # DYS
