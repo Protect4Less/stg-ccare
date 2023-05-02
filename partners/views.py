@@ -59,6 +59,7 @@ def upload_create_policy(request):
         {"id": 1069, "name": '1069 - REVENT'},
         {"id": 1070, "name": '1070 - Fone Garage'},
         {"id": 1071, "name": '1071 - Papita Trading LLC'},
+        {"id": 1072, "name": '1072 - COSTLESS HUB ELECTRONICS LLC'},
     ]
     try:
         if excel_file is not None and partner_code is not None:
@@ -279,7 +280,7 @@ def upload_create_policy(request):
                     '1036', '1044', '1035', '1026', '1046', '1051', '1049', '1052',
                     '1040', '1053', '1054', '1055', '1056', '1057', '1059', '1060',
                     '1061', '1062', '1064', '1065', '1066', '1067', '1068', '1069',
-                    '1070'
+                    '1070', '1072'
                 ] and email_value != 'None':
                     sku_value = sku_value if sku_value is not None and sku_value != "None" else ""
                     popd_data = PartnersDAO.insert_partners_offline_policy_data({
